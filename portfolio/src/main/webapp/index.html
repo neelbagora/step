@@ -1,18 +1,87 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-  </head>
-  <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Neel's Portfolio</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="script.js"></script>
+    </head>
+    <!-- Introduction section of Portfolio website. -->
+    <div class="header">
+        <script>filterSelection('all');</script>
+        <h1>Neel Bagora</h1>
     </div>
-  </body>
+    <div class="container flex-parent" style="background-color: white;">
+        <div class="jumbotron flex-child">
+            <h2 class="display-4">Welcome!</h2>
+            <p class="lead">I am a rising sophomore studying Computer Science and Data Science at Purdue University. In my free time, I love flying commercial aircraft on flight simulators and playing basketball.</p>
+            <hr class="my-4">
+            <p>Below you will find information about the projects I have worked on, planes that I have flown on my simulator, and pictures of cool things I have done. Enjoy!</p>
+        </div>
+        <div class="jumbotron flex-child">
+            <img src="/images/neel.JPG">
+        </div>
+    </div>
+    <hr>
+
+    <!-- Portfolio Gallery Grid -->
+    <div class="main">
+        <h2>PICTURES</h2>
+
+        <!-- Buttons to navigate Gallery Grid -->
+        <div id="myBtnContainer">
+            <button class="btn active" onclick="filterSelection('all')"> Show all</button>
+            <button class="btn" onclick="filterSelection('projects')"> Projects</button>
+            <button class="btn" onclick="filterSelection('airplanes')"> Airplanes</button>
+            <button class="btn" onclick="filterSelection('miscellaneous')"> Miscellaneous</button>
+        </div>
+        <div class="row">
+            <p class="lead" id="gallery-text"> These are photographs related to what I do in my free time. Click any button in the menu to begin viewing.</p>
+            <div class="column airplanes">
+                <div class="content">
+                    <img src="/images/747-8.png" alt="Airplanes" style="width:100%">
+                    <h4>Lufthansa Boeing 747-8</h4>
+                    <p> I was actually learning about this plane so I did not do a full flight with it.</p>
+                </div>
+            </div>
+            <div class="column airplanes">
+                <div class="content">
+                    <img src="/images/738.png" alt="Airplanes" style="width:100%">
+                    <h4>Delta Boeing 737-800</h4>
+                    <p>I flew this 737-800 as DAL327 from Indianapolis to Washington D.C.</p>
+                </div>
+            </div>
+            <div class="column airplanes">
+                <div class="content">
+                    <img src="/images/737-800.png" alt="Airplanes" style="width:100%">
+                    <h4>Southwest Boeing 737-800</h4>
+                    <p>This flight was flown as SWA642 from San Francisco to San Diego.</p>
+                </div>
+            </div>
+            <div class="column airplanes">
+                <div class="content">
+                    <img src="/images/777-300ER.png" alt="Airplanes" style="width:100%">
+                    <h4>United Boeing 777-300ER</h4>
+                    <p>Flew this 777-300ER from Chicago to San Francisco and had to divert to Sacramento because the gear did not go down..</p>
+                </div>
+            </div>
+            <div class="column airplanes">
+                <div class="content">
+                    <img src="/images/A330-200.png" alt="Airplanes" style="width:100%">
+                    <h4>KLM Airbus A330-200</h4>
+                    <p>This was the longest flight I have done up till now, from Aruba to Amsterdam, took almost 10 hours to complete.</p>
+                </div>
+            </div>
+            <div class="column airplanes">
+                <div class="content">
+                    <img src="/images/767-300F.png" alt="Airplanes" style="width:100%">
+                    <h4>Fedex 767-300F</h4>
+                    <p>I flew this cargo route from Miami to Atlanta as Fedex 865, then flew from Atlanta to Memphis. Total flight time was close to about 5 hours.</p>
+                </div>
+            </div>
+        <!-- END GRID -->
+        </div>
+    </div>
 </html>
