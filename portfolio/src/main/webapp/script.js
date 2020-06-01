@@ -29,12 +29,12 @@ function filterPicturesBySelection(selection) {
         selection = "";
     }
     for (index = 0; index < column.length; index++) {
-        removeClassFromElement(column[index], "show");
+        RemoveElementClass(column[index], "show");
         if (column[index].className.indexOf(selection) > -1) updateClassNames(column[index], "show");
     }
 }
 
-function updateClassNames(element, name) {
+function AddElementClass(element, name) {
     var index, originalClass, newClass;
     originalClass = element.className.split(" ");
     newClass = name.split(" ");
@@ -45,7 +45,7 @@ function updateClassNames(element, name) {
     }
 }
 
-function removeClassFromElement(element, name) {
+function RemoveElementClass(element, name) {
     var index, originalClass, newClass;
     originalClass = element.className.split(" ");
     newClass = name.split(" ");
