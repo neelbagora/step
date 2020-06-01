@@ -11,37 +11,41 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-filterSelection("all")
-function filterSelection(c) {
-    updateGalleryText(c);
-    var x, i;
-    x = document.getElementsByClassName("column");
-    if (c == "all") c = "";
-    for (i = 0; i < x.length; i++) {
-        removeClass(x[i], "show");
-        if (x[i].className.indexOf(c) > -1) addClass(x[i], "show");
+filterPicturesBySelection("all")
+function filterPicturesBySelection(selection) {
+    updateGalleryText(selection);
+    var picture, index;
+    column = document.getElementsByClassName("column");
+    if (selection == "all") {
+        selection = "";
+    }
+    for (index = 0; index < column.length; index++) {
+        removeClass(column[index], "show");
+        if (column[index].className.indexOf(selection) > -1) addClass(column[index], "show");
     }
 }
 
 function addClass(element, name) {
-    var i, arr1, arr2;
-    arr1 = element.className.split(" ");
-    arr2 = name.split(" ");
-    for (i = 0; i < arr2.length; i++) {
-        if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+    var index, originalClass, newClass;
+    originalClass = element.className.split(" ");
+    newClass = name.split(" ");
+    for (index = 0; index < newClass.length; index++) {
+        if (originalClass.indexOf(newClass[index]) == -1) {
+            element.className += " " + newClass[index];
+        }
     }
 }
 
 function removeClass(element, name) {
-    var i, arr1, arr2;
-    arr1 = element.className.split(" ");
-    arr2 = name.split(" ");
-    for (i = 0; i < arr2.length; i++) {
-        while (arr1.indexOf(arr2[i]) > -1) {
-        arr1.splice(arr1.indexOf(arr2[i]), 1);     
+    var index, originalClass, newClass;
+    originalClass = element.className.split(" ");
+    newClass = name.split(" ");
+    for (index = 0; index < newClass.length; index++) {
+        while (originalClass.indexOf(newClass[index]) > -1) {
+            originalClass.splice(originalClass.indexOf(newClass[index]), 1);     
         }
     }
-    element.className = arr1.join(" ");
+    element.className = originalClass.join(" ");
 }
 
 function updateGalleryText(elementName) {
@@ -66,8 +70,8 @@ function updateGalleryText(elementName) {
 // Add active class to the current button (highlight it)
 var btnContainer = document.getElementById("myBtnContainer");
 var btns = document.getElementsByClassName("btn");
-for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener("click", function() {
+for (var index = 0; index < btns.length; index++) {
+    btns[index].addEventListener("click", function() {
     var current = document.getElementsByClassName("active");
     current[0].className = current[0].className.replace(" active", "");
     this.className += " active";
