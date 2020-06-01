@@ -20,12 +20,12 @@ function filterPicturesBySelection(selection) {
         selection = "";
     }
     for (index = 0; index < column.length; index++) {
-        removeClass(column[index], "show");
-        if (column[index].className.indexOf(selection) > -1) addClass(column[index], "show");
+        removeClassFromElement(column[index], "show");
+        if (column[index].className.indexOf(selection) > -1) updateClassNames(column[index], "show");
     }
 }
 
-function addClass(element, name) {
+function updateClassNames(element, name) {
     var index, originalClass, newClass;
     originalClass = element.className.split(" ");
     newClass = name.split(" ");
@@ -36,7 +36,7 @@ function addClass(element, name) {
     }
 }
 
-function removeClass(element, name) {
+function removeClassFromElement(element, name) {
     var index, originalClass, newClass;
     originalClass = element.className.split(" ");
     newClass = name.split(" ");
