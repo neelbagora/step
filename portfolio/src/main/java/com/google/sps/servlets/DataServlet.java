@@ -23,10 +23,19 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+    private int pageViews = 0;
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello world!</h1>");
-  }
+    /*
+     * doGet is a method that handles HTTP get requests for Java servlets.
+     * In this context, this method is responsible for handling network 
+     * requests for the portfolio website.
+     */
+
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        pageViews++;
+        response.setContentType("text/html;");
+        response.getWriter().println("<h1>Hello Neel!<h1>");
+        response.getWriter().println("<h1>This page has been viewed " + pageViews + " times.</h1>");
+    }
 }
