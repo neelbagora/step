@@ -122,13 +122,13 @@ function createCommentNode(name, text, date) {
     return COMMENTNODE;
 } /* createCommentNode() */
 
-// Code to add active class to the default button.
+// Adds click listener and listener actions to each button.
 var btnContainer = document.getElementById("myBtnContainer");
 var btns = document.getElementsByClassName("btn");
 for (var index = 0; index < btns.length; index++) {
     btns[index].addEventListener("click", function() {
-    var current = document.getElementsByClassName("active");
-    current[0].className = current[0].className.replace(" active", "");
-    this.className += " active";
-  });
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+    });
 }
