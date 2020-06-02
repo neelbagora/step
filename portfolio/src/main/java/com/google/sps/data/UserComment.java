@@ -3,7 +3,6 @@ package com.google.sps.data;
 import java.util.Date;
 
 // Class to handle comments being pushed to the server.
-
 public final class UserComment {
     private String name;
     private String text;
@@ -18,7 +17,6 @@ public final class UserComment {
     /*
      * getDate returns data (Date class) associated with specific UserComment.
      */
-
     public Date getDate() {
         return this.date;
     } /* getDate() */
@@ -26,7 +24,6 @@ public final class UserComment {
     /*
      * getName returns the String name associated with the UserComment.
      */
-
     public String getName() {
         return this.name;
     } /* getName() */
@@ -34,7 +31,6 @@ public final class UserComment {
     /*
     * getName returns the String text associated with the UserComment.
     */
-
     public String getText() {
         return this.text;
     } /* getText() */
@@ -43,7 +39,6 @@ public final class UserComment {
     * setText sets the String text associated with the UserComment.
     * Not used at the moment.
     */
-
     public void setText(String text) {
         this.text = text;
     } /* setText() */
@@ -52,7 +47,6 @@ public final class UserComment {
     * setName sets the String name associated with the UserComment.
     * Not used at the moment.
     */
-
     public void setName(String name) {
         this.name = name;
     } /* setName() */

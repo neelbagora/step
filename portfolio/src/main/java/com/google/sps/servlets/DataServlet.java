@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 // Handles comment data on the '/data' page.
-
 @WebServlet("/data")
 public final class DataServlet extends HttpServlet {
     private int pageViews = 0;
@@ -39,7 +38,6 @@ public final class DataServlet extends HttpServlet {
      * the HTML page to contain the comment data in JSON format of the 
      * commentData ArrayList.
      */
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ipAddresses.add(getClientIpAddress(request));
@@ -56,16 +54,13 @@ public final class DataServlet extends HttpServlet {
      * doPost is the method responsible for updating the global commentData
      * ArrayList with each comment added.
      */
-
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get the input from the form.
-
         UserComment newComment = parseCommentData(request);
         commentData.add(newComment);
 
         // Respond with the result.
-
         response.sendRedirect("/index.html");
     } /* doPost() */
 
@@ -74,7 +69,6 @@ public final class DataServlet extends HttpServlet {
      * and parses relevant information such as first name, last name, and
      * message.
      */
-
     private UserComment parseCommentData(HttpServletRequest request) {
         return new UserComment(getParameter(request, "fname", "") 
                                + " " + getParameter(request, "lname", ""), 
@@ -86,7 +80,6 @@ public final class DataServlet extends HttpServlet {
      * request.getParameter produces a null result, the default value is
      * used.
      */
-
     private String getParameter(HttpServletRequest request, String name, String defaultValue) {
         String value = request.getParameter(name);
         if (value == null) {
@@ -96,7 +89,6 @@ public final class DataServlet extends HttpServlet {
     } /* getParameter() */
 
     // potential IP Headers
-
     private static final String[] IP_HEADER_CANDIDATES = { 
         "X-Forwarded-For",
         "Proxy-Client-IP",
@@ -117,7 +109,6 @@ public final class DataServlet extends HttpServlet {
      * items in the IP_HEADER_CANDIDATE array to cross check the authenticity
      * of the request IP address.
      */
-
     public static String getClientIpAddress(HttpServletRequest request) {
         for (String header : IP_HEADER_CANDIDATES) {
             String ip = request.getHeader(header);
