@@ -20,7 +20,14 @@ const MISCELLANEOUS = "These are pictures that I thought were cool but could not
 const SHOWALL = "These are all the pictures that I have posted on this website, pictures can be filtered using the menu bar above.";
 
 
-filterPicturesBySelection("all")
+filterPicturesBySelection("all");
+
+/*
+ * filterPicturesBySelection is a function responsible for updating
+ * the gallery images. Based on the selection, the gallery will show 
+ * images that are relevant to the selection.
+ */
+
 function filterPicturesBySelection(selection) {
     updateGalleryText(selection);
     var picture, index;
@@ -32,7 +39,13 @@ function filterPicturesBySelection(selection) {
         removeElementClass(column[index], "show");
         if (column[index].className.indexOf(selection) > -1) addElementClass(column[index], "show");
     }
-}
+} /* filterPicturesBySelection() */
+
+/*
+ * addElementClass is a function meant to dynamically add classes to the
+ * html page. For example, the show class can be added to the images to
+ * reflect the characteristics of the specified class.
+ */
 
 function addElementClass(element, name) {
     var index, originalClass, newClass;
@@ -43,7 +56,13 @@ function addElementClass(element, name) {
             element.className += " " + newClass[index];
         }
     }
-}
+} /* addElementClass() */
+
+/*
+ * removeElementClass is a function meant to dynamically remove classes to
+ * html elements. Refer to addElementClass to better understand the purpose
+ * of this function.
+ */
 
 function removeElementClass(element, name) {
     var index, originalClass, newClass;
@@ -55,7 +74,14 @@ function removeElementClass(element, name) {
         }
     }
     element.className = originalClass.join(" ");
-}
+} /* removeElementClass() */
+
+/*
+ * updateGalleryText takes in a specified selection and updates
+ * the header text of the gallery to reflect the images specifed.
+ * For example, the 'airplanes' specification will display the
+ * AIRPLANES constant defined on line 17.
+ */
 
 function updateGalleryText(elementName) {
     if (elementName === 'all'){
@@ -70,9 +96,41 @@ function updateGalleryText(elementName) {
     else {
         document.getElementById('gallery-text').innerText = MISCELLANEOUS;
     }
-}
+} /* updateGalleryText() */
 
-// Add active class to the current button (highlight it)
+/*
+ * createCommentData() is the function responsible for obtaining the comment
+ * data from the Java servlet and appends data on the 'comments-container' of
+ * the html page.
+ */
+
+function createCommentData() {
+    fetch('/data').then(response => response.json()).then((commentData) => {
+        console.log('begin task');
+        const COMMANDSELEMENT = document.getElementById('comments-container');
+        for (var i = 0; i < commentData.length; i++) {
+            const COMMENT = commentData[i];
+            console.log(COMMENT);
+            COMMANDSELEMENT.appendChild(createCommentNode(COMMENT.name, COMMENT.text, COMMENT.date));
+            COMMANDSELEMENT.appendChild(document.createElement('hr'));
+        }
+    });
+} /* createCommentData() */
+
+/*
+ * createCommentNode takes in the comment data and returns the li element to be
+ * appended to the ul element of the HTML page.
+ */
+
+function createCommentNode(name, text, date) {
+    const COMMENTNODE = document.createElement('li');
+    COMMENTNODE.innerText = name + "\n" + date + "\n" + text;
+    
+    return COMMENTNODE;
+} /* createCommentNode() */
+
+// Code to add active class to the default button.
+
 var btnContainer = document.getElementById("myBtnContainer");
 var btns = document.getElementsByClassName("btn");
 for (var index = 0; index < btns.length; index++) {

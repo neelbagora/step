@@ -2,8 +2,23 @@
     box-sizing: border-box;
 }
 
+textarea {
+    resize: vertical;
+    width: 100%;
+    height: 200px;
+}
+
+.submit {
+    color: white;
+    background-color: #666;
+}
+
+.submit:hover {
+    background-color: #ddd;
+    color: black;
+}
+
 body {
-    background-color: white;
     font-family: Calibri;
     animation: fadeInAnimation ease 3s;
     animation-iteration-count: 1; 
