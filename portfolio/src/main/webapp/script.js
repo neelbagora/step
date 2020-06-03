@@ -112,8 +112,8 @@ function createCommentData() {
 }
 
 /*
- * createCommentNode takes in the comment data and returns the li element to be
- * appended to the ul element of the HTML page.
+ * createCommentNode takes in the comment data and returns the div element to be
+ * appended to the parent div element of the HTML page.
  */
 function createCommentNode(name, text, date) {
     const commentNode = document.createElement('div');
