@@ -19,6 +19,9 @@ import com.google.sps.data.UserComment;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -29,8 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 // Handles comment data on the '/data' page.
 @WebServlet("/data")
 public final class DataServlet extends HttpServlet {
-    private int pageViews = 0;
-    private ArrayList<UserComment> commentData = new ArrayList<>();
     private ArrayList<String> ipAddresses = new ArrayList<>();
 
     /*
@@ -38,7 +39,7 @@ public final class DataServlet extends HttpServlet {
      * In this context, this method is responsible for handling network 
      * requests for the portfolio website. Each call to the method formats
      * the HTML page to contain the comment data in JSON format of the 
-     * commentData ArrayList. 
+     * comments ArrayList. 
      * 
      * This method will track IP addresses making GET requests to the server.
      */
@@ -46,9 +47,24 @@ public final class DataServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ipAddresses.add(getClientIpAddress(request));
         System.out.println("Client IP Address: " + getClientIpAddress(request));
+        
+        Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+
+        ArrayList<UserComment> comments = new ArrayList<>();
+        for (Entity entity : results.asIterable()) {
+            long id = entity.getKey().getId();
+            String name = (String) entity.getProperty("name");
+            String message = (String) entity.getProperty("text");
+            long timestamp = (long) entity.getProperty("timestamp");
+
+            UserComment userComment = new UserComment(id, name, message, timestamp);
+            comments.add(userComment);
+        }
 
         Gson gson = new Gson();
-        String jsonData = gson.toJson(commentData);
+        String jsonData = gson.toJson(comments);
         
         response.setContentType("application/json;");
         response.getWriter().println(jsonData);
@@ -62,12 +78,11 @@ public final class DataServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get the input from the form.
         UserComment newComment = parseCommentData(request);
-        commentData.add(newComment);
 
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("name", newComment.getName());
         commentEntity.setProperty("text", newComment.getText());
-        commentEntity.setProperty("date", newComment.getDate().toString());
+        commentEntity.setProperty("timestamp", System.currentTimeMillis());
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
