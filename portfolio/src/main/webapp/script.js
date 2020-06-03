@@ -37,7 +37,7 @@ function filterPicturesBySelection(selection) {
         removeElementClass(column[index], "show");
         if (column[index].className.indexOf(selection) > -1) addElementClass(column[index], "show");
     }
-} /* filterPicturesBySelection() */
+}
 
 /*
  * addElementClass is a function meant to dynamically add classes to the
@@ -53,7 +53,7 @@ function addElementClass(element, name) {
             element.className += " " + newClass[index];
         }
     }
-} /* addElementClass() */
+}
 
 /*
  * removeElementClass is a function meant to dynamically remove classes to
@@ -70,7 +70,7 @@ function removeElementClass(element, name) {
         }
     }
     element.className = originalClass.join(" ");
-} /* removeElementClass() */
+}
 
 /*
  * updateGalleryText takes in a specified selection and updates
@@ -91,7 +91,7 @@ function updateGalleryText(elementName) {
     else {
         document.getElementById('gallery-text').innerText = MISCELLANEOUS;
     }
-} /* updateGalleryText() */
+}
 
 /*
  * createCommentData() is the function responsible for obtaining the comment
@@ -101,26 +101,35 @@ function updateGalleryText(elementName) {
 function createCommentData() {
     fetch('/data').then(response => response.json()).then((commentData) => {
         console.log('begin task');
-        const COMMANDSELEMENT = document.getElementById('comments-container');
+        const commandElement = document.getElementById('comments-container');
         for (var i = 0; i < commentData.length; i++) {
-            const COMMENT = commentData[i];
-            console.log(COMMENT);
-            COMMANDSELEMENT.appendChild(createCommentNode(COMMENT.name, COMMENT.text, COMMENT.date));
-            COMMANDSELEMENT.appendChild(document.createElement('hr'));
+            const comment = commentData[i];
+            console.log(comment);
+            commandElement.appendChild(createCommentNode(comment.name, comment.text, comment.date));
+            commandElement.appendChild(document.createElement('hr'));
         }
     });
-} /* createCommentData() */
+}
 
 /*
  * createCommentNode takes in the comment data and returns the li element to be
  * appended to the ul element of the HTML page.
  */
 function createCommentNode(name, text, date) {
-    const COMMENTNODE = document.createElement('li');
-    COMMENTNODE.innerText = name + "\n" + date + "\n" + text;
+    const commentNode = document.createElement('div');
+    commentNode.className = "comment";
+    const nameNode = document.createElement('h4');
+    nameNode.innerText = name;
+    const dateNode = document.createElement('h5');
+    dateNode.innerText = date;
+    const textNode = document.createElement('h5');
+    textNode.innerText = text;        
+    commentNode.appendChild(nameNode);
+    commentNode.appendChild(dateNode);
+    commentNode.appendChild(textNode);
     
-    return COMMENTNODE;
-} /* createCommentNode() */
+    return commentNode;
+}
 
 // Adds click listener and listener actions to each button.
 var btnContainer = document.getElementById("myBtnContainer");

@@ -16,7 +16,9 @@ package com.google.sps.servlets;
 
 import com.google.gson.Gson;
 import com.google.sps.data.UserComment;
-import com.google.sps.data.UserComment;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.util.ArrayList;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -36,7 +38,9 @@ public final class DataServlet extends HttpServlet {
      * In this context, this method is responsible for handling network 
      * requests for the portfolio website. Each call to the method formats
      * the HTML page to contain the comment data in JSON format of the 
-     * commentData ArrayList.
+     * commentData ArrayList. 
+     * 
+     * This method will track IP addresses making GET requests to the server.
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -48,7 +52,7 @@ public final class DataServlet extends HttpServlet {
         
         response.setContentType("application/json;");
         response.getWriter().println(jsonData);
-    } /* doGet() */
+    }
 
     /*
      * doPost is the method responsible for updating the global commentData
@@ -60,9 +64,17 @@ public final class DataServlet extends HttpServlet {
         UserComment newComment = parseCommentData(request);
         commentData.add(newComment);
 
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("name", newComment.getName());
+        commentEntity.setProperty("text", newComment.getText());
+        commentEntity.setProperty("date", newComment.getDate().toString());
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(commentEntity);
+
         // Respond with the result.
         response.sendRedirect("/index.html");
-    } /* doPost() */
+    }
 
     /*
      * parseCommentData takes in an HttpServletRequest from the HTML form
@@ -70,23 +82,24 @@ public final class DataServlet extends HttpServlet {
      * message.
      */
     private UserComment parseCommentData(HttpServletRequest request) {
-        return new UserComment(getParameter(request, "fname", "") 
-                               + " " + getParameter(request, "lname", ""), 
+        return new UserComment(getParameter(request, "fname", "") + " " 
+                             + getParameter(request, "lname", ""), 
                                getParameter(request, "message", ""));
-    } /* parseCommentData() */
+    }
 
     /*
      * getParameter is purposed with handling edge cases for input data. If
      * request.getParameter produces a null result, the default value is
      * used.
      */
-    private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    private String getParameter(HttpServletRequest request, String name,
+                                String defaultValue) {
         String value = request.getParameter(name);
         if (value == null) {
             return defaultValue;
         }
         return value;
-    } /* getParameter() */
+    }
 
     // potential IP Headers
     private static final String[] IP_HEADER_CANDIDATES = { 
@@ -104,10 +117,12 @@ public final class DataServlet extends HttpServlet {
     };
 
     /*
-     * getClientIpAddress() is a debugging method used to confirm that the
-     * webpage is accepting client connections. Utilizes the
-     * items in the IP_HEADER_CANDIDATE array to cross check the authenticity
-     * of the request IP address.
+     * getClientIpAddress() is a method used to confirm that the
+     * webpage is accepting client connections and to log all IP addresses
+     * Utilizes the items in the IP_HEADER_CANDIDATE array to cross check 
+     * and verify IP address. 
+     * IP addresses are used to keep track of requests that can be used to
+     * find potential misuse of server resources.
      */
     public static String getClientIpAddress(HttpServletRequest request) {
         for (String header : IP_HEADER_CANDIDATES) {
@@ -118,5 +133,5 @@ public final class DataServlet extends HttpServlet {
             }
         }
         return request.getRemoteAddr();
-    } /* getClientIpAddress() */
+    }
 }

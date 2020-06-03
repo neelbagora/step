@@ -19,21 +19,21 @@ public final class UserComment {
      */
     public Date getDate() {
         return this.date;
-    } /* getDate() */
+    }
     
     /*
      * getName returns the String name associated with the UserComment.
      */
     public String getName() {
         return this.name;
-    } /* getName() */
+    }
 
     /*
     * getName returns the String text associated with the UserComment.
     */
     public String getText() {
         return this.text;
-    } /* getText() */
+    }
 
     /*
     * setText sets the String text associated with the UserComment.
@@ -41,7 +41,7 @@ public final class UserComment {
     */
     public void setText(String text) {
         this.text = text;
-    } /* setText() */
+    }
 
     /*
     * setName sets the String name associated with the UserComment.
@@ -49,5 +49,5 @@ public final class UserComment {
     */
     public void setName(String name) {
         this.name = name;
-    } /* setName() */
+    }
 }

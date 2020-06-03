@@ -8,9 +8,26 @@ textarea {
     height: 200px;
 }
 
+.comment {
+    background-color: rgb(241, 241, 241);
+    border-style: solid;
+    border-width: thin;
+    width: 50%;
+}
+
+.comment h4 {
+    font-weight: bold;
+    padding: 10px;
+}
+
+.comment h5 {
+    padding: 10px;
+}
+
 .submit {
-    color: white;
-    background-color: #666;
+    color: black;
+    background-color: white;
+    border-style: none;
 }
 
 .submit:hover {
