@@ -2,8 +2,40 @@
     box-sizing: border-box;
 }
 
-body {
+textarea {
+    resize: vertical;
+    width: 100%;
+    height: 200px;
+}
+
+.comment {
+    background-color: rgb(241, 241, 241);
+    border-style: solid;
+    border-width: thin;
+    width: 50%;
+}
+
+.comment h4 {
+    font-weight: bold;
+    padding: 10px;
+}
+
+.comment h5 {
+    padding: 10px;
+}
+
+.submit {
+    color: black;
     background-color: white;
+    border-style: none;
+}
+
+.submit:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+body {
     font-family: Calibri;
     animation: fadeInAnimation ease 3s;
     animation-iteration-count: 1; 

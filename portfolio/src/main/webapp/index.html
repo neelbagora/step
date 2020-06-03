@@ -10,7 +10,7 @@
         <script src="script.js"></script>
     </head>
     <!-- Introduction section of Portfolio website. -->
-    <body>
+    <body onload="createCommentData();">
         <div class="header">
             <h1>Neel Bagora</h1>
         </div>
@@ -124,6 +124,24 @@
                 </div>
             <!-- END GRID -->
             </div>
+        </div>
+        <div class="main">
+            <h2>LEAVE A COMMENT!</h2>
+            <div id="test"></div>
+            <div id="comments-container"></div>
+            <form action="/data" method="POST">
+                <label for="fname">First name:</label><br>
+                <input type="text" id="fname" name="fname" value=""><br>
+
+                <label for="lname">Last name:</label><br>
+                <input type="text" id="lname" name="lname" value=""><br><br>
+
+                <textarea id="message" name="message"></textarea>
+                <input class="submit" type="submit" value="Submit">
+            </form>
+            <br>
+            <br>
+            <br>
         </div>
     </body>
 </html>
