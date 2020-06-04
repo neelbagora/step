@@ -27,16 +27,16 @@ filterPicturesBySelection("all");
  * images that are relevant to the selection.
  */
 function filterPicturesBySelection(selection) {
-    updateGalleryText(selection);
-    var index;
-    column = document.getElementsByClassName("column");
-    if (selection == "all") {
-        selection = "";
-    }
-    for (index = 0; index < column.length; index++) {
-        removeElementClass(column[index], "show");
-        if (column[index].className.indexOf(selection) > -1) addElementClass(column[index], "show");
-    }
+	updateGalleryText(selection);
+	var index;
+	column = document.getElementsByClassName("column");
+	if (selection == "all") {
+			selection = "";
+	}
+	for (index = 0; index < column.length; index++) {
+			removeElementClass(column[index], "show");
+			if (column[index].className.indexOf(selection) > -1) addElementClass(column[index], "show");
+	}
 }
 
 /*
@@ -45,14 +45,14 @@ function filterPicturesBySelection(selection) {
  * reflect the characteristics of the specified class.
  */
 function addElementClass(element, name) {
-    var index, originalClass, newClass;
-    originalClass = element.className.split(" ");
-    newClass = name.split(" ");
-    for (index = 0; index < newClass.length; index++) {
-        if (originalClass.indexOf(newClass[index]) == -1) {
-            element.className += " " + newClass[index];
-        }
-    }
+	var index, originalClass, newClass;
+	originalClass = element.className.split(" ");
+	newClass = name.split(" ");
+	for (index = 0; index < newClass.length; index++) {
+			if (originalClass.indexOf(newClass[index]) == -1) {
+					element.className += " " + newClass[index];
+			}
+	}
 }
 
 /*
@@ -61,15 +61,15 @@ function addElementClass(element, name) {
  * of this function.
  */
 function removeElementClass(element, name) {
-    var index, originalClass, newClass;
-    originalClass = element.className.split(" ");
-    newClass = name.split(" ");
-    for (index = 0; index < newClass.length; index++) {
-        while (originalClass.indexOf(newClass[index]) > -1) {
-            originalClass.splice(originalClass.indexOf(newClass[index]), 1);     
-        }
-    }
-    element.className = originalClass.join(" ");
+	var index, originalClass, newClass;
+	originalClass = element.className.split(" ");
+	newClass = name.split(" ");
+	for (index = 0; index < newClass.length; index++) {
+			while (originalClass.indexOf(newClass[index]) > -1) {
+					originalClass.splice(originalClass.indexOf(newClass[index]), 1);     
+			}
+	}
+	element.className = originalClass.join(" ");
 }
 
 /*
@@ -79,18 +79,18 @@ function removeElementClass(element, name) {
  * AIRPLANES constant defined on line 17.
  */
 function updateGalleryText(elementName) {
-    if (elementName === 'all'){
-        document.getElementById('gallery-text').innerText = SHOWALL;
-    }
-    else if (elementName === 'airplanes') {
-        document.getElementById('gallery-text').innerText = AIRPLANES;
-    }
-    else if (elementName === 'projects') {
-        document.getElementById('gallery-text').innerText = PROJECTS;
-    }
-    else {
-        document.getElementById('gallery-text').innerText = MISCELLANEOUS;
-    }
+	if (elementName === 'all'){
+			document.getElementById('gallery-text').innerText = SHOWALL;
+	}
+	else if (elementName === 'airplanes') {
+			document.getElementById('gallery-text').innerText = AIRPLANES;
+	}
+	else if (elementName === 'projects') {
+			document.getElementById('gallery-text').innerText = PROJECTS;
+	}
+	else {
+			document.getElementById('gallery-text').innerText = MISCELLANEOUS;
+	}
 }
 
 /*
@@ -99,16 +99,16 @@ function updateGalleryText(elementName) {
  * the html page.
  */
 function createCommentData() {
-    fetch('/data').then(response => response.json()).then((commentData) => {
-        console.log('begin task');
-        const commandElement = document.getElementById('comments-container');
-        for (var i = 0; i < commentData.length; i++) {
-            const comment = commentData[i];
-            console.log(comment);
-            commandElement.appendChild(createCommentNode(comment.name, comment.text, comment.date));
-            commandElement.appendChild(document.createElement('hr'));
-        }
-    });
+	fetch('/data?limit=3').then(response => response.json()).then((commentData) => {
+		console.log('begin task');
+		const commandElement = document.getElementById('comments-container');
+		for (var i = 0; i < commentData.length; i++) {
+			const comment = commentData[i];
+			console.log(comment);
+			commandElement.appendChild(createCommentNode(comment.name, comment.text, comment.date));
+			commandElement.appendChild(document.createElement('hr'));
+		}
+	});
 }
 
 /** 
@@ -116,27 +116,27 @@ function createCommentData() {
  * values.
  */
 function validateForm() {
-    var fname = document.forms["comment-form"]["fname"].value;
-    var message = document.forms["comment-form"]["message"].value;
-    if (fname == "") {
-        alert("First Name is empty!");
-        return false;
-    }
+	var fname = document.forms["comment-form"]["fname"].value;
+	var message = document.forms["comment-form"]["message"].value;
+	if (fname == "") {
+			alert("First Name is empty!");
+			return false;
+	}
 
-    if (fname.trim() === '') {
-        alert("First Name is invalid!");
-        return false;
-    }
+	if (fname.trim() === '') {
+			alert("First Name is invalid!");
+			return false;
+	}
 
-    if (message == "") {
-        alert("Message is empty!");
-        return false;
-    }
+	if (message == "") {
+			alert("Message is empty!");
+			return false;
+	}
 
-    if (message.trim() === '') {
-        alert("Message is invalid!");
-        return false;
-    }
+	if (message.trim() === '') {
+			alert("Message is invalid!");
+			return false;
+	}
 }
 
 /*
@@ -144,28 +144,28 @@ function validateForm() {
  * appended to the parent div element of the HTML page.
  */
 function createCommentNode(name, text, date) {
-    const commentNode = document.createElement('div');
-    commentNode.className = "comment";
-    const nameNode = document.createElement('h4');
-    nameNode.innerText = name;
-    const dateNode = document.createElement('h5');
-    dateNode.innerText = date;
-    const textNode = document.createElement('h5');
-    textNode.innerText = text;        
-    commentNode.appendChild(nameNode);
-    commentNode.appendChild(dateNode);
-    commentNode.appendChild(textNode);
-    
-    return commentNode;
+	const commentNode = document.createElement('div');
+	commentNode.className = "comment";
+	const nameNode = document.createElement('h4');
+	nameNode.innerText = name;
+	const dateNode = document.createElement('h5');
+	dateNode.innerText = date;
+	const textNode = document.createElement('h5');
+	textNode.innerText = text;        
+	commentNode.appendChild(nameNode);
+	commentNode.appendChild(dateNode);
+	commentNode.appendChild(textNode);
+	
+	return commentNode;
 }
 
 // Adds click listener and listener actions to each button.
 var btnContainer = document.getElementById("myBtnContainer");
 var btns = document.getElementsByClassName("btn");
 for (var index = 0; index < btns.length; index++) {
-    btns[index].addEventListener("click", function() {
-        var current = document.getElementsByClassName("active");
-        current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-    });
+	btns[index].addEventListener("click", function() {
+			var current = document.getElementsByClassName("active");
+			current[0].className = current[0].className.replace(" active", "");
+			this.className += " active";
+	});
 }
