@@ -9,10 +9,11 @@ textarea {
 }
 
 .comment {
-  background-color: rgb(241, 241, 241);
+  background-color:#cbe4fa;
   border-style: solid;
   border-width: thin;
-  width: 50%;
+  border-radius: 20px;
+  width: 30%;
 }
 
 .comment h4 {
@@ -23,6 +24,24 @@ textarea {
 .comment h5 {
   padding: 10px;
 }
+
+.custom-select {
+    position: relative;
+    font-family: Calibri;
+    background-color: #ddd;
+    color: black;
+    width: 10%;
+    height: 25px;
+}
+
+.custom-select:hover {
+    cursor: pointer;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element: */
+}
+
 
 body {
   font-family: Calibri;

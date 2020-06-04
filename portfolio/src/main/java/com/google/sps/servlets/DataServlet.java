@@ -59,16 +59,19 @@ public final class DataServlet extends HttpServlet {
 		PreparedQuery results = datastore.prepare(query);
 
 		ArrayList<UserComment> comments = new ArrayList<>();
-		int limit = 0;
-		try {
-			limit = Integer.parseInt(request.getParameter("limit"));
-		} catch (NumberFormatException e) {
-			limit = -1;
-		}
+
+		int limit = Integer.MAX_VALUE;
+        if (request.getParameter("limit") != null) {
+            try {
+    			limit = Integer.parseInt(request.getParameter("limit"));
+            } catch (NumberFormatException e) {
+                limit = 10;
+            }
+        }
 
 		int counter = 0;
 		for (Entity entity : results.asIterable()) {
-			if (counter >= limit) {
+            if (counter >= limit) {
 				break;
 			}
 			counter++;
@@ -77,7 +80,7 @@ public final class DataServlet extends HttpServlet {
 			String message = (String) entity.getProperty("text");
 			long timestamp = (long) entity.getProperty("timestamp");
 
-			UserComment userComment = new UserComment(id, name, message, timestamp);
+            UserComment userComment = new UserComment(id, name, message, timestamp);
 			comments.add(userComment);
 		}
 
@@ -143,14 +146,14 @@ public final class DataServlet extends HttpServlet {
 		return simpleDateFormat.format(date) + " " + timezone;
 	}
 
-    /**
-     * parseCommentData takes in an HttpServletRequest from the HTML form
-     * and parses relevant information such as first name, last name, and
-     * message.
-     *
-     * @param request HttpServletRequest used to obtain data from POST request
-     * @return        UserComment constructed from POST request.
-     */
+  /**
+	 * parseCommentData takes in an HttpServletRequest from the HTML form
+	 * and parses relevant information such as first name, last name, and
+	 * message.
+	 *
+	 * @param request HttpServletRequest used to obtain data from POST request
+	 * @return        UserComment constructed from POST request.
+	 */
 	private UserComment parseCommentData(HttpServletRequest request) {
 		return new UserComment(getParameter(request, "fname", "") + " " 
 													+ getParameter(request, "lname", ""), 

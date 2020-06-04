@@ -10,7 +10,7 @@
 		<script src="script.js"></script>
 	</head>
   <!-- Introduction section of Portfolio website. -->
-  <body onload="createCommentData();">
+  <body onload="createCommentData(true);">
 		<div class="header">
 			<h1>Neel Bagora</h1>
 		</div>
@@ -127,7 +127,13 @@
 		</div>
 		<div class="main">
 			<h2>LEAVE A COMMENT!</h2>
-			<div id="test"></div>
+			<label for="limit-selector">Number of Comments:</label><br>
+            <select class="custom-select" onchange="selectFunction()" name="limit-selector" id="limit-selector">
+                <option value="0">Select number:</option>
+                
+            </select>
+            <br>
+            <br>
 			<div id="comments-container"></div>
 			<form name="comment-form" action="/data" method="POST" onsubmit="return validateForm()" required>
 				<label for="fname">First name:</label><br>
@@ -139,6 +145,7 @@
 				<textarea id="message" name="message"></textarea>
 				<input class="btn" type="submit" style="float: right;" value="Submit">
 			</form>
+            <button class="btn" onclick="createCommentData(true);" style="float: right;">Refresh</button>
 			<br>
 			<br>
 			<br>

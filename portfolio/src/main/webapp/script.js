@@ -17,7 +17,8 @@ const AIRPLANES = "These are photos I have taken from the flight simulator, X-Pl
 const PROJECTS = "These are pictures of the projects I have worked on throughout the years. I am mainly experienced in Java, C, C++, and Python. A lot of my projects were built when I wanted to learn something new, for example, the currency converter gave me a chance to learn both Kotlin and API calls in Kotlin/Java. The MIDI music program was a way for me to learn how binary files work in real world context.";
 const MISCELLANEOUS = "These are pictures that I thought were cool but could not categorize.";
 const SHOWALL = "These are all the pictures that I have posted on this website, pictures can be filtered using the menu bar above.";
-
+let url_data = '/data';
+let firstRun = true;
 
 filterPicturesBySelection("all");
 
@@ -34,8 +35,10 @@ function filterPicturesBySelection(selection) {
 			selection = "";
 	}
 	for (index = 0; index < column.length; index++) {
-			removeElementClass(column[index], "show");
-			if (column[index].className.indexOf(selection) > -1) addElementClass(column[index], "show");
+		removeElementClass(column[index], "show");
+		if (column[index].className.indexOf(selection) > -1) {
+			addElementClass(column[index], "show");
+		}
 	}
 }
 
@@ -49,9 +52,9 @@ function addElementClass(element, name) {
 	originalClass = element.className.split(" ");
 	newClass = name.split(" ");
 	for (index = 0; index < newClass.length; index++) {
-			if (originalClass.indexOf(newClass[index]) == -1) {
-					element.className += " " + newClass[index];
-			}
+		if (originalClass.indexOf(newClass[index]) == -1) {
+			element.className += " " + newClass[index];
+		}
 	}
 }
 
@@ -65,9 +68,9 @@ function removeElementClass(element, name) {
 	originalClass = element.className.split(" ");
 	newClass = name.split(" ");
 	for (index = 0; index < newClass.length; index++) {
-			while (originalClass.indexOf(newClass[index]) > -1) {
-					originalClass.splice(originalClass.indexOf(newClass[index]), 1);     
-			}
+		while (originalClass.indexOf(newClass[index]) > -1) {
+			originalClass.splice(originalClass.indexOf(newClass[index]), 1);     
+		}
 	}
 	element.className = originalClass.join(" ");
 }
@@ -80,35 +83,58 @@ function removeElementClass(element, name) {
  */
 function updateGalleryText(elementName) {
 	if (elementName === 'all'){
-			document.getElementById('gallery-text').innerText = SHOWALL;
+		document.getElementById('gallery-text').innerText = SHOWALL;
 	}
 	else if (elementName === 'airplanes') {
-			document.getElementById('gallery-text').innerText = AIRPLANES;
+		document.getElementById('gallery-text').innerText = AIRPLANES;
 	}
 	else if (elementName === 'projects') {
-			document.getElementById('gallery-text').innerText = PROJECTS;
+		document.getElementById('gallery-text').innerText = PROJECTS;
 	}
 	else {
-			document.getElementById('gallery-text').innerText = MISCELLANEOUS;
+		document.getElementById('gallery-text').innerText = MISCELLANEOUS;
 	}
 }
 
 /*
  * createCommentData() is the function responsible for obtaining the comment
  * data from the Java servlet and appends data on the 'comments-container' of
- * the html page.
+ * the html page. Initial url is '/data'.
  */
-function createCommentData() {
-	fetch('/data?limit=3').then(response => response.json()).then((commentData) => {
-		console.log('begin task');
-		const commandElement = document.getElementById('comments-container');
-		for (var i = 0; i < commentData.length; i++) {
+
+function createCommentData(firstRun) {
+    console.log(url_data);
+	fetch(url_data).then(response => response.json()).then((commentData) => {
+		console.log('NEW URL: ' + url_data);
+	    const commandElement = document.getElementById('comments-container');
+		limit = commentData.length;
+		document.getElementById('comments-container').innerHTML = "";
+        for (var i = 0; i < commentData.length; i++) {
+            if (firstRun) {
+                const selector = document.getElementById('limit-selector');
+                const child = document.createElement('option');
+                child.innerText = i + 1;
+                child.value = i + 1;
+                child.className = ''
+                selector.appendChild(child);
+            }
 			const comment = commentData[i];
 			console.log(comment);
 			commandElement.appendChild(createCommentNode(comment.name, comment.text, comment.date));
 			commandElement.appendChild(document.createElement('hr'));
 		}
+        firstRun = false;
 	});
+}
+
+function selectFunction() {
+    var selection = document.getElementById("limit-selector").value;
+    if (selection == 0) {
+        return;
+    }
+    url_data = '/data?limit=' + selection;
+    createCommentData(false);
+    document.getElementById("comments-container").contentWindow.location.reload(true);
 }
 
 /** 
