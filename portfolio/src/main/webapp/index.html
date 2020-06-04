@@ -129,7 +129,7 @@
             <h2>LEAVE A COMMENT!</h2>
             <div id="test"></div>
             <div id="comments-container"></div>
-            <form action="/data" method="POST">
+            <form name="comment-form" action="/data" method="POST" onsubmit="return validateForm()" required>
                 <label for="fname">First name:</label><br>
                 <input type="text" id="fname" name="fname" value=""><br>
 

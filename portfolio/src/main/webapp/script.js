@@ -111,6 +111,34 @@ function createCommentData() {
     });
 }
 
+/** 
+ * validateForm ensures that the input in the comment form contains valid
+ * values.
+ */
+function validateForm() {
+    var fname = document.forms["comment-form"]["fname"].value;
+    var message = document.forms["comment-form"]["message"].value;
+    if (fname == "") {
+        alert("First Name is empty!");
+        return false;
+    }
+
+    if (fname.trim() === '') {
+        alert("First Name is invalid!");
+        return false;
+    }
+
+    if (message == "") {
+        alert("Message is empty!");
+        return false;
+    }
+
+    if (message.trim() === '') {
+        alert("Message is invalid!");
+        return false;
+    }
+}
+
 /*
  * createCommentNode takes in the comment data and returns the div element to be
  * appended to the parent div element of the HTML page.

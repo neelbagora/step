@@ -28,25 +28,31 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.TimeZone;
+import java.text.SimpleDateFormat;
 
 // Handles comment data on the '/data' page.
 @WebServlet("/data")
 public final class DataServlet extends HttpServlet {
     private ArrayList<String> ipAddresses = new ArrayList<>();
 
-    /*
+    /**
      * doGet is a method that handles HTTP get requests for Java servlets.
      * In this context, this method is responsible for handling network 
      * requests for the portfolio website. Each call to the method formats
      * the HTML page to contain the comment data in JSON format of the 
      * comments ArrayList. 
      * 
-     * This method will track IP addresses making GET requests to the server.
+     * <b>This method will log IP addresses making requests to the server.</b>
+     * 
+     * @param request HttpServletRequest used to make POST request.
+     * @param response HttpServletResponse used in GET requests.
+     * @throws IOException
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ipAddresses.add(getClientIpAddress(request));
-        System.out.println("Client IP Address: " + getClientIpAddress(request));
+        postIpAddress(getClientIpAddress(request));
         
         Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -70,9 +76,13 @@ public final class DataServlet extends HttpServlet {
         response.getWriter().println(jsonData);
     }
 
-    /*
+    /**
      * doPost is the method responsible for updating the global commentData
      * ArrayList with each comment added.
+     *
+     * @param request HttpServletRequest used to make POST request.
+     * @param response HttpServletResponse used in GET requests.
+     * @throws IOException
      */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -91,10 +101,43 @@ public final class DataServlet extends HttpServlet {
         response.sendRedirect("/index.html");
     }
 
-    /*
+    /**
+     * postIpAddress creates a post request to Java Servlet
+     * containing string IP address and the String timestamp.
+     *
+     * @param ipAddress String IP address being posted.
+     */
+    private void postIpAddress(String ipAddress) {
+        Entity ipEntity = new Entity("IPAddress");
+        ipEntity.setProperty("ip", ipAddress);
+        ipEntity.setProperty("timestamp", convertTime(System.currentTimeMillis()));
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(ipEntity);
+    }
+
+    /**
+     * convertTime takes in the long representation of the current time
+     * in milliseconds and converts it to a readable date format in the
+     * form "MM/dd/yyyy hh:mm:ss [timezone]".
+     *
+     * @param timestamp long representing timestamp in milliseconds
+     * @return          String date converted from long.
+     */
+    private String convertTime(long timestamp) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+        String timezone = "PST";
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
+        Date date = new Date(timestamp);
+        return simpleDateFormat.format(date) + " " + timezone;
+    }
+
+    /**
      * parseCommentData takes in an HttpServletRequest from the HTML form
      * and parses relevant information such as first name, last name, and
      * message.
+     *
+     * @param request HttpServletRequest used to obtain data from POST request
+     * @return        UserComment constructed from POST request.
      */
     private UserComment parseCommentData(HttpServletRequest request) {
         return new UserComment(getParameter(request, "fname", "") + " " 
@@ -102,10 +145,15 @@ public final class DataServlet extends HttpServlet {
                                getParameter(request, "message", ""));
     }
 
-    /*
+    /**
      * getParameter is purposed with handling edge cases for input data. If
      * request.getParameter produces a null result, the default value is
      * used.
+     *
+     * @param request      HttpServletRequest that will be used to getParameter data
+     * @param name         Name of parameter of interest.
+     * @param defaultValue The specified default value returned.
+     * @return             String value from parameter of interest
      */
     private String getParameter(HttpServletRequest request, String name,
                                 String defaultValue) {
@@ -131,13 +179,16 @@ public final class DataServlet extends HttpServlet {
         "REMOTE_ADDR"
     };
 
-    /*
+    /**
      * getClientIpAddress() is a method used to confirm that the
      * webpage is accepting client connections and to log all IP addresses
      * Utilizes the items in the IP_HEADER_CANDIDATE array to cross check 
      * and verify IP address. 
      * IP addresses are used to keep track of requests that can be used to
      * find potential misuse of server resources.
+     *
+     * @param request The HttpServletRequest of interest
+     * @return        IP Address of the HTTP request as String
      */
     public static String getClientIpAddress(HttpServletRequest request) {
         for (String header : IP_HEADER_CANDIDATES) {
