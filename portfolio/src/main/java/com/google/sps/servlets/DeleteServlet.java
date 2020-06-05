@@ -33,9 +33,13 @@ public final class DeleteServlet extends HttpServlet {
 		PreparedQuery results = datastore.prepare(query);
     
     for (Entity entity : results.asIterable()) {
-      if (entity.getKey().getId() == Long.parseLong(id)) {
-        datastore.delete(entity.getKey());
-        break;
+      try {
+        if (entity.getKey().getId() == Long.parseLong(id)) {
+          datastore.delete(entity.getKey());
+          break;
+        }
+      } catch (NumberFormatException e) {
+        System.out.println("Improper input");
       }
     }  
     // Respond with the result.

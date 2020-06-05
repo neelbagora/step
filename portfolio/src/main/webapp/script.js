@@ -22,10 +22,12 @@ let firstRun = true;
 
 filterPicturesBySelection("all");
 
-/*
+/**
  * filterPicturesBySelection is a function responsible for updating
  * the gallery images. Based on the selection, the gallery will show 
  * images that are relevant to the selection.
+ *
+ * @param selection specified category that viewer is viewing images.
  */
 function filterPicturesBySelection(selection) {
 	updateGalleryText(selection);
@@ -42,10 +44,13 @@ function filterPicturesBySelection(selection) {
 	}
 }
 
-/*
+/**
  * addElementClass is a function meant to dynamically add classes to the
  * html page. For example, the show class can be added to the images to
  * reflect the characteristics of the specified class.
+ *
+ * @param element HTML element that the new class will be appended to.
+ * @param name    Class name to be added to HTML element.
  */
 function addElementClass(element, name) {
 	var index, originalClass, newClass;
@@ -58,10 +63,13 @@ function addElementClass(element, name) {
 	}
 }
 
-/*
+/**
  * removeElementClass is a function meant to dynamically remove classes to
  * html elements. Refer to addElementClass to better understand the purpose
  * of this function.
+ *
+ * @param element HTML element that the class name will be removed from.
+ * @param name    Class name to be removed from HTML element.
  */
 function removeElementClass(element, name) {
 	var index, originalClass, newClass;
@@ -75,11 +83,13 @@ function removeElementClass(element, name) {
 	element.className = originalClass.join(" ");
 }
 
-/*
+/**
  * updateGalleryText takes in a specified selection and updates
  * the header text of the gallery to reflect the images specifed.
  * For example, the 'airplanes' specification will display the
- * AIRPLANES constant defined on line 17.
+ * AIRPLANES constant defined above.
+ *
+ * @param elementName name of category that the gallery is displaying.
  */
 function updateGalleryText(elementName) {
 	if (elementName === 'all'){
@@ -99,10 +109,10 @@ function updateGalleryText(elementName) {
 /*
  * createCommentData() is the function responsible for obtaining the comment
  * data from the Java servlet and appends data on the 'comments-container' of
- * the html page. Initial url is '/data'.
+ * the html page. Default url is '/data'.
  */
 function createCommentData(firstRun) {
-    console.log(url_data);
+  console.log(url_data);
 	fetch(url_data).then(response => response.json()).then((commentData) => {
 		console.log('NEW URL: ' + url_data);
 	  const commentElement = document.getElementById('comments-container');
@@ -128,10 +138,13 @@ function createCommentData(firstRun) {
 	});
 }
 
-/*
+/**
  * configureDeleteButton takes in the comment retrieved from server
  * and appends new button elements within form elements. Delete Button
  * is used to send post requests to the '/delete-data' url.
+ *
+ * @param  comment comment element that will have the button.
+ * @return         new button created
  */
 function configureDeleteButton(comment) {
   var form = document.createElement('form');
@@ -147,9 +160,9 @@ function configureDeleteButton(comment) {
   return form;
 }
 
-/*
+/**
  * function used by the limit-selector element to specify number
- * of elements to post.
+ * of elements to post. Configured url_data upon change.
  */
 function selectFunction() {
     var selection = document.getElementById("limit-selector").value;
@@ -164,6 +177,8 @@ function selectFunction() {
 /** 
  * validateForm ensures that the input in the comment form contains valid
  * values.
+ *
+ * @return boolean expression verifying that input is correct.
  */
 function validateForm() {
 	var fname = document.forms["comment-form"]["fname"].value;
@@ -189,9 +204,14 @@ function validateForm() {
 	}
 }
 
-/*
+/**
  * createCommentNode takes in the comment data and returns the div element to be
  * appended to the parent div element of the HTML page.
+ *
+ * @param name Name of commenter
+ * @param text Message on the comment.
+ * @param date Date of the comment.
+ * @return     CommentNode that is created by the supplying information.
  */
 function createCommentNode(name, text, date) {
 	const commentNode = document.createElement('div');
