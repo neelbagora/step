@@ -61,13 +61,13 @@ public final class DataServlet extends HttpServlet {
 		ArrayList<UserComment> comments = new ArrayList<>();
 
 		int limit = Integer.MAX_VALUE;
-        if (request.getParameter("limit") != null) {
-            try {
-    			limit = Integer.parseInt(request.getParameter("limit"));
-            } catch (NumberFormatException e) {
-                limit = 10;
-            }
-        }
+    if (request.getParameter("limit") != null) {
+      try {
+        limit = Integer.parseInt(request.getParameter("limit"));
+      } catch (NumberFormatException e) {
+        limit = 10;
+      }
+    }
 
 		int counter = 0;
 		for (Entity entity : results.asIterable()) {
@@ -80,7 +80,7 @@ public final class DataServlet extends HttpServlet {
 			String message = (String) entity.getProperty("text");
 			long timestamp = (long) entity.getProperty("timestamp");
 
-            UserComment userComment = new UserComment(id, name, message, timestamp);
+      UserComment userComment = new UserComment(id, name, message, timestamp);
 			comments.add(userComment);
 		}
 

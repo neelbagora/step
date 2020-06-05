@@ -101,32 +101,51 @@ function updateGalleryText(elementName) {
  * data from the Java servlet and appends data on the 'comments-container' of
  * the html page. Initial url is '/data'.
  */
-
 function createCommentData(firstRun) {
     console.log(url_data);
 	fetch(url_data).then(response => response.json()).then((commentData) => {
 		console.log('NEW URL: ' + url_data);
-	    const commandElement = document.getElementById('comments-container');
+	  const commentElement = document.getElementById('comments-container');
 		limit = commentData.length;
 		document.getElementById('comments-container').innerHTML = "";
-        for (var i = 0; i < commentData.length; i++) {
-            if (firstRun) {
-                const selector = document.getElementById('limit-selector');
-                const child = document.createElement('option');
-                child.innerText = i + 1;
-                child.value = i + 1;
-                child.className = ''
-                selector.appendChild(child);
-            }
-			const comment = commentData[i];
-			console.log(comment);
-			commandElement.appendChild(createCommentNode(comment.name, comment.text, comment.date));
-			commandElement.appendChild(document.createElement('hr'));
-		}
-        firstRun = false;
+    for (var i = 0; i < commentData.length; i++) {
+      if (firstRun) {
+          const selector = document.getElementById('limit-selector');
+          const child = document.createElement('option');
+          child.innerText = i + 1;
+          child.value = i + 1;
+          child.className = ''
+          selector.appendChild(child);
+      }
+      const comment = commentData[i];
+      console.log(comment);
+      commentElement.appendChild(createCommentNode(comment.name, comment.text, comment.date));
+      var deleteBtn = configureDeleteButton(comment);
+      commentElement.appendChild(deleteBtn);
+      commentElement.appendChild(document.createElement('hr'));
+    }
+    firstRun = false;
 	});
 }
 
+function configureDeleteButton(comment) {
+  var form = document.createElement('form');
+  form.method = "POST";
+  var deleteBtn = document.createElement('input');
+  deleteBtn.className = 'btn';
+  deleteBtn.type = 'submit';
+  deleteBtn.value = 'Delete Comment';
+  deleteBtn.id = comment.id;
+  form.action = '/delete-data?id=' + comment.id;
+  deleteBtn.onclick = "createCommentData();";
+  form.appendChild(deleteBtn);
+  return form;
+}
+
+/*
+ * function used by the limit-selector element to specify number
+ * of elements to post.
+ */
 function selectFunction() {
     var selection = document.getElementById("limit-selector").value;
     if (selection == 0) {
