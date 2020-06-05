@@ -165,13 +165,13 @@ function configureDeleteButton(comment) {
  * of elements to post. Configured url_data upon change.
  */
 function selectFunction() {
-    var selection = document.getElementById("limit-selector").value;
-    if (selection == 0) {
-        return;
-    }
-    url_data = '/data?limit=' + selection;
-    createCommentData(false);
-    document.getElementById("comments-container").contentWindow.location.reload(true);
+  var selection = document.getElementById("limit-selector").value;
+  if (selection == 0) {
+      return;
+  }
+  url_data = '/data?limit=' + selection;
+  createCommentData(false);
+  document.getElementById("comments-container").contentWindow.location.reload(true);
 }
 
 /** 
@@ -189,18 +189,18 @@ function validateForm() {
 	}
 
 	if (fname.trim() === '') {
-			alert("First Name is invalid!");
-			return false;
+    alert("First Name is invalid!");
+    return false;
 	}
 
 	if (message == "") {
-			alert("Message is empty!");
-			return false;
+    alert("Message is empty!");
+    return false;
 	}
 
 	if (message.trim() === '') {
-			alert("Message is invalid!");
-			return false;
+    alert("Message is invalid!");
+    return false;
 	}
 }
 
@@ -234,8 +234,8 @@ var btnContainer = document.getElementById("myBtnContainer");
 var btns = document.getElementsByClassName("btn");
 for (var index = 0; index < btns.length; index++) {
 	btns[index].addEventListener("click", function() {
-			var current = document.getElementsByClassName("active");
-			current[0].className = current[0].className.replace(" active", "");
-			this.className += " active";
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
 	});
 }

@@ -120,7 +120,6 @@
 					</a>
 					<h4>When I played Alto Saxophone in band.</h4>
 					<p>Band was a big part of my life, I played alto saxophone for five years, participating in bands like marching band, concert band, and jazz band.</p>
-			
 				</div>
 			<!-- END GRID -->
 			</div>
@@ -128,12 +127,11 @@
 		<div class="main">
 			<h2>LEAVE A COMMENT!</h2>
 			<label for="limit-selector">Number of Comments:</label><br>
-            <select class="custom-select" onchange="selectFunction()" name="limit-selector" id="limit-selector">
-                <option value="0">Select number:</option>
-                
-            </select>
-            <br>
-            <br>
+        <select class="custom-select" onchange="selectFunction()" name="limit-selector" id="limit-selector">
+          <option value="0">Select number:</option>  
+        </select>
+        <br>
+        <br>
 			<div id="comments-container"></div>
 			<form name="comment-form" action="/data" method="POST" onsubmit="return validateForm()" required>
 				<label for="fname">First name:</label><br>
