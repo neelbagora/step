@@ -1,145 +1,153 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 textarea {
-    resize: vertical;
-    width: 100%;
-    height: 200px;
+  resize: vertical;
+  width: 100%;
+  height: 200px;
 }
 
 .comment {
-    background-color: rgb(241, 241, 241);
-    border-style: solid;
-    border-width: thin;
-    width: 50%;
+  background-color:#cbe4fa;
+  border-style: solid;
+  border-width: thin;
+  border-radius: 20px;
+  width: 30%;
 }
 
 .comment h4 {
-    font-weight: bold;
-    padding: 10px;
+  font-weight: bold;
+  padding: 10px;
 }
 
 .comment h5 {
-    padding: 10px;
+  padding: 10px;
 }
 
-.submit {
-    color: black;
-    background-color: white;
-    border-style: none;
-}
-
-.submit:hover {
+.custom-select {
+    position: relative;
+    font-family: Calibri;
     background-color: #ddd;
     color: black;
+    width: 10%;
+    height: 25px;
 }
 
+.custom-select:hover {
+    cursor: pointer;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element: */
+}
+
+
 body {
-    font-family: Calibri;
-    animation: fadeInAnimation ease 3s;
-    animation-iteration-count: 1; 
-    animation-fill-mode: forwards; 
-    background-color: white;
-    margin: 0;
+  font-family: Calibri;
+  animation: fadeInAnimation ease 3s;
+  animation-iteration-count: 1; 
+  animation-fill-mode: forwards; 
+  background-color: white;
+  margin: 0;
 }
   
 @keyframes fadeInAnimation { 
-    0% { 
-        opacity: 0; 
-    } 
-    100% { 
-        opacity: 1; 
-     } 
+  0% { 
+    opacity: 0; 
+  } 
+  100% { 
+    opacity: 1; 
+  } 
 } 
 
 img {
-    max-width: 80%;
-    max-height: 80%;
-    display: block; /* remove extra space below image */
+  max-width: 80%;
+  max-height: 80%;
+  display: block; /* remove extra space below image */
 }
 
 .header {
-    padding: 10px;
-    text-align: left;
-    background: #666;
-    color: white;
-    font-size: 30px;
+  padding: 10px;
+  text-align: left;
+  background: #666;
+  color: white;
+  font-size: 30px;
 }
 
 .header.h1 {
-    font-size: large;
+  font-size: large;
 }
 
 .main {
-    max-width: 1000px;
-    margin: auto;
+  max-width: 1000px;
+  margin: auto;
 }
 
 h1 {
-    font-size: 50px;
-    word-break: break-all;
+  font-size: 50px;
+  word-break: break-all;
 }
 
 .title {
-    text-align: center;
+  text-align: center;
 }
 
 .row {
-    margin: 8px -16px;
+  margin: 8px -16px;
 }
 
 .row,
 .row > .column {
-    padding: 8px;
+  padding: 8px;
 }
 
 .jumbotron {
-    background-color: white;
-    color: white;
+  background-color: white;
+  color: white;
 }
 
 .column {
-    float: left;
-    width: 25%;
+  float: left;
+  width: 25%;
 }
 
 .row:after {
-    content: "";
-    display: table;
-    clear: both;
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .flex-parent {
-    display: flex;
+  display: flex;
 }
 
 .flex-child {
-    background-color: white;
-    flex: 1;
-    color: white;
+  background-color: white;
+  flex: 1;
+  color: white;
 }
 
 .content {
-    background-color: white;
-    padding: 10px;
+  background-color: white;
+  padding: 10px;
 }
 
 .container {
-    background-color: white;
-    padding: 10px;
+  background-color: white;
+  padding: 10px;
 }
 
 @media screen and (max-width: 900px) {
-    .column {
-        width: 50%;
-    }
+  .column {
+    width: 50%;
+  }
 }
 
 @media screen and (max-width: 600px) {
-    .column {
-        width: 100%;
-    }
+  .column {
+    width: 100%;
+  }
 }
 
 * {
@@ -147,152 +155,151 @@ h1 {
 }
 
 .icon {
-    max-width: 10%;
-    max-height: 10%;
-    display: block;
-    transition: .5s ease;
+  max-width: 10%;
+  max-height: 10%;
+  display: block;
+  transition: .5s ease;
 }
 
 .icon:hover {
-    cursor: pointer;
-    opacity: 0.3;
+  cursor: pointer;
+  opacity: 0.3;
 }
 
-#footerlist li
-{
-    list-style: none;
-    text-decoration:none;
-    display:inline-block;  
-    float:right;
-    position: relative;
+#footerlist li {
+  list-style: none;
+  text-decoration:none;
+  display:inline-block;  
+  float:right;
+  position: relative;
 }
 
 
 /* Center website */
 .main {
-    max-width: 1000px;
-    margin: auto;
+  max-width: 1000px;
+  margin: auto;
 }
 
 h1 {
-    font-size: 50px;
-    word-break: break-all;
+  font-size: 50px;
+  word-break: break-all;
 }
 
 .row {
-    margin: 8px -16px;
+  margin: 8px -16px;
 }
 
 /* Add padding BETWEEN each column (if you want) */
 .row,
 .row > .column {
-    padding: 8px;
+  padding: 8px;
 }
 
 /* Create three equal columns that floats next to each other */
 .column {
-    float: left;
-    width: 33.33%;
-    display: none; /* Hide columns by default */
+  float: left;
+  width: 33.33%;
+  display: none; /* Hide columns by default */
 }
 
 /* Clear floats after rows */
 .row:after {
-    content: "";
-    display: table;
-    clear: both;
+  content: "";
+  display: table;
+  clear: both;
 }
 
 /* Content */
 .content {
-    background-color: white;
-    padding: 10px;
+  background-color: white;
+  padding: 10px;
 }
 
 /* The "show" class is added to the filtered elements */
 .show {
-    display: block;
-    animation: fadeInAnimation ease 3s;
-    animation-iteration-count: 1; 
-    animation-fill-mode: forwards; 
+  display: block;
+  animation: fadeInAnimation ease 3s;
+  animation-iteration-count: 1; 
+  animation-fill-mode: forwards; 
 }
 
 /* Style the buttons */
 .btn {
-    border: none;
-    outline: none;
-    padding: 12px 16px;
-    background-color: white;
-    cursor: pointer;
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background-color: white;
+  cursor: pointer;
 }
 
 /* Add a grey background color on mouse-over */
 .btn:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 /* Add a dark background color to the active button */
 .btn.active {
-    background-color: #666;
-    color: white;
+  background-color: #666;
+  color: white;
 }
 
 /* Fixed/sticky icon bar (vertically aligned 50% from the top of the screen) */
 .icon-bar {
-    position: fixed;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+  position: fixed;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 /* Style the icon bar links */
 .icon-bar a {
-    display: block;
-    text-align: center;
-    padding: 16px;
-    transition: all 0.3s ease;
-    color: white;
-    font-size: 20px;
+  display: block;
+  text-align: center;
+  padding: 16px;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 20px;
 }
 
 /* Style the social media icons with color, if you want */
 .icon-bar a:hover {
-    background-color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
 }
 
 .instagram {
-    background: rgb(204, 171, 122);
-    color: white;
+  background: rgb(204, 171, 122);
+  color: white;
 }
 
 gallery {
-    float: left;
-    object-fit: cover;
+  float: left;
+  object-fit: cover;
 }
 
 .linkedin {
-    background: #007bb5;
-    color: white;
+  background: #007bb5;
+  color: white;
 }
 
 .github {
-    background: #919597;
-    color: white;
+  background: #919597;
+  color: white;
 }
 
 .email {
-    background: #48cfa7;
-    color: white;
+  background: #48cfa7;
+  color: white;
 }
 
 .col-container {
-    display: table; /* Make the container element behave like a table */
-    width: 100%; /* Set full-width to expand the whole page */
+  display: table; /* Make the container element behave like a table */
+  width: 100%; /* Set full-width to expand the whole page */
 }
 
 .col {
-    display: table-cell; /* Make elements inside the container behave like table cells */
+  display: table-cell; /* Make elements inside the container behave like table cells */
 }
 
 

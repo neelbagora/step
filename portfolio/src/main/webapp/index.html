@@ -1,147 +1,152 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Neel's Portfolio</title>
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="script.js"></script>
-    </head>
-    <!-- Introduction section of Portfolio website. -->
-    <body onload="createCommentData();">
-        <div class="header">
-            <h1>Neel Bagora</h1>
-        </div>
-        <hr class="my-4">
-        <div class="icon-bar">
-            <a href="https://www.github.com/neelbagora" target="_blank" class="github"><i class="fa fa-github"></i></a>
-            <a href="https://www.instagram.com/neelbagora" target="_blank" class="instagram"><i class="fa fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/in/neelbagora/" target="_blank" class="linkedin"><i class="fa fa-linkedin"></i></a>
-            <a href="mailto: neelbagora@gmail.com" target="_blank" class="email"><i class="fa fa-envelope"></i></a>
-        </div>
-        <div class="container flex-parent" style="background-color: white;">
-            <div class="jumbotron flex-child" style="background-color: white;">
-                <h2 class="display-4">Welcome!</h2>
-                <p class="lead">I am a rising sophomore studying Computer Science and Data Science at Purdue University. In my free time, I love flying commercial aircraft on flight simulators and playing basketball.</p>
-                <hr class="my-4">
-                <p>Below you will find information about the projects I have worked on, planes that I have flown on my simulator, and pictures of cool things I have done. Enjoy!</p>
-                <hr class="my-4">
-            </div>
-            <div class="jumbotron flex-child" style="background-color: white;">
-                <img class="pfp" src="/images/neel.JPG">
-            </div>
-        </div>
-        <hr>
+  <head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Neel's Portfolio</title>
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="script.js"></script>
+	</head>
+  <!-- Introduction section of Portfolio website. -->
+  <body onload="createCommentData(true);">
+		<div class="header">
+			<h1>Neel Bagora</h1>
+		</div>
+		<hr class="my-4">
+		<div class="icon-bar">
+			<a href="https://www.github.com/neelbagora" target="_blank" class="github"><i class="fa fa-github"></i></a>
+			<a href="https://www.instagram.com/neelbagora" target="_blank" class="instagram"><i class="fa fa-instagram"></i></a>
+			<a href="https://www.linkedin.com/in/neelbagora/" target="_blank" class="linkedin"><i class="fa fa-linkedin"></i></a>
+			<a href="mailto: neelbagora@gmail.com" target="_blank" class="email"><i class="fa fa-envelope"></i></a>
+		</div>
+		<div class="container flex-parent" style="background-color: white;">
+			<div class="jumbotron flex-child" style="background-color: white;">
+				<h2 class="display-4">Welcome!</h2>
+				<p class="lead">I am a rising sophomore studying Computer Science and Data Science at Purdue University. In my free time, I love flying commercial aircraft on flight simulators and playing basketball.</p>
+				<hr class="my-4">
+				<p>Below you will find information about the projects I have worked on, planes that I have flown on my simulator, and pictures of cool things I have done. Enjoy!</p>
+				<hr class="my-4">
+			</div>
+			<div class="jumbotron flex-child" style="background-color: white;">
+				<img class="pfp" src="/images/neel.JPG">
+			</div>
+		</div>
+		<hr>
 
-        <!-- Portfolio Gallery Grid -->
-        <div class="main">
-            <h2>PICTURES</h2>
+		<!-- Portfolio Gallery Grid -->
+		<div class="main">
+			<h2>PICTURES</h2>
 
-            <!-- Buttons to navigate Gallery Grid -->
-            <div id="myBtnContainer">
-                <button class="btn" onclick="filterPicturesBySelection('all')"> Show all</button>
-                <button class="btn" onclick="filterPicturesBySelection('projects')"> Projects</button>
-                <button class="btn" onclick="filterPicturesBySelection('airplanes')"> Airplanes</button>
-                <button class="btn" onclick="filterPicturesBySelection('other')"> Other</button>
-            </div>
-            <div class="row">
-                <div class="container">
-                    <p class="lead" id="gallery-text"> These are photographs related to what I do in my free time. Click any button in the menu to further filter the pictures.</p>
-                </div>
-                <div class="column projects show">
-                    <a href="https://github.com/neelbagora/Android-Calculator" target="_blank">
-                        <img class="gallery" src="/images/androidcalculator.png" alt="Airplanes" style="height: 100%;">
-                    </a>
-                    <h4>Android Calculator</h4>
-                    <p>This is a basic calculator built using Android and Java.</p>
-                    <a href="/images/midi.png" target="_blank">
-                        <img class="gallery" src="/images/midi.png" alt="MIDI Playback Program" style="width:100%">
-                    </a>
-                    <h4>MIDI Playback and Modification Program</h4>
-                    <p>Using C, I built a program that is capable of parsing through and modifying MIDI files to change octaves, notes, and other significant events. The GUI was built using GTK.</p>
-                    <a href="https://github.com/neelbagora/photoncode" target="_blank">
-                        <img class="gallery" src="/images/photoncontroller.jpg" alt="Photon Controller" style="width:100%">
-                    </a>
-                    <h4>Solar Tracking Weather Station</h4>
-                    <p>This project is a solar powered and tracking weather station that reports the weather in the surrounding environment of the device and uploads that data to the Losant cloud platform. It was built using C/C++ on a Photon microcontroller, custom PCB boards, and CAD software.</p>
-                    <a href="https://github.com/neelbagora/currency-converter" target="_blank">
-                        <img class="gallery" src="/images/currencyconverter.jpg" alt="Currency Converter" style="width:100%">
-                    </a>
-                    <h4>Currency Converter Java Application</h4>
-                    <p>Using Kotlin, I built a web currency converter that uses the fixer.io API to provide real time exchange rates for currency conversion.</p>
-                </div>
-                <div class="column airplanes show">
-                    <a href="/images/747-8.png" target="_blank">
-                        <img class="gallery" src="/images/747-8.png" alt="Airplanes" style="width:100%">
-                    </a>
-                    <h4>Lufthansa Boeing 747-8</h4>
-                    <p> I was actually learning about this plane so I did not do a full flight with it.</p>
-                    <a href="/images/738.png" target="_blank">
-                        <img class="gallery" src="/images/738.png" alt="Airplanes" style="width:100%">
-                    </a>
-                    <h4>Delta Boeing 737-800</h4>
-                    <p>I flew this 737-800 as DAL327 from Indianapolis to Washington D.C.</p>
-                    <a href="/images/737-800.png" target="_blank">
-                        <img class="gallery" src="/images/737-800.png" alt="Airplanes" style="width:100%">
-                    </a>
-                    <h4>Southwest Boeing 737-800</h4>
-                    <p>This flight was flown as SWA642 from San Francisco to San Diego.</p>
-                    <a href="/images/777-300ER.png" target="_blank">
-                        <img class="gallery" src="/images/777-300ER.png" alt="Airplanes" style="width:100%">
-                    </a>
-                    <h4>United Boeing 777-300ER</h4>
-                    <p>Flew this 777-300ER as UAL642 from Chicago to San Francisco and had to divert to Sacramento because the landing gear did not extend..</p>
-                    <a href="/images/A330-200.png" target="_blank">
-                        <img class="gallery" src="/images/A330-200.png" alt="Airplanes" style="width:100%">
-                    </a>
-                    <h4>KLM Airbus A330-200</h4>
-                    <p>This was the longest flight I have done up till now, from Aruba to Amsterdam, took almost 10 hours to complete.</p>
-                    <a href="/images/767-300F.png" target="_blank">
-                        <img class="gallery" src="/images/767-300F.png" alt="Airplanes" style="width:100%">
-                    </a>
-                    <h4>Fedex Boeing 767-300F</h4>
-                    <p>I flew this cargo route from Miami to Atlanta as Fedex 865, then flew from Atlanta to Memphis (Fedex Hub). Total flight time was close to about 5 hours.</p>
-                </div>
-                <div class="column other show">
-                    <a href="/images/ham.jpg" target="_blank">
-                        <img class="gallery" src="/images/fcclicense.jpg" alt="Other" style="width:100%">
-                    </a>
-                    <h4>The day I earned my FCC General License.</h4>
-                    <p>Through a Satellite Tracking Program at my school, I studied for the FCC General Exam and passed it, allowing me to further transmit on HAM radio.</p>
-                    <a href="/images/ham.jpg" target="_blank">
-                        <img class="gallery" src="/images/ham.jpg" alt="Other" style="width:100%">
-                    </a>
-                    <h4>A picture of me operating on HAM radio for the first time.</h4>
-                    <p>After several weeks of studying and training, I was finally able to transmit for the first time on HAM radio.</p>
-                    <a href="/images/band.jpg" target="_blank">
-                        <img class="gallery" src="/images/band.jpg" alt="Other" style="width:100%">
-                    </a>
-                    <h4>When I played Alto Saxophone in band.</h4>
-                    <p>Band was a big part of my life, I played alto saxophone for five years, participating in bands like marching band, concert band, and jazz band.</p>
-                
-                </div>
-            <!-- END GRID -->
-            </div>
-        </div>
-        <div class="main">
-            <h2>LEAVE A COMMENT!</h2>
-            <div id="test"></div>
-            <div id="comments-container"></div>
-            <form action="/data" method="POST">
-                <label for="fname">First name:</label><br>
-                <input type="text" id="fname" name="fname" value=""><br>
+			<!-- Buttons to navigate Gallery Grid -->
+			<div id="myBtnContainer">
+				<button class="btn" onclick="filterPicturesBySelection('all')"> Show all</button>
+				<button class="btn" onclick="filterPicturesBySelection('projects')"> Projects</button>
+				<button class="btn" onclick="filterPicturesBySelection('airplanes')"> Airplanes</button>
+				<button class="btn" onclick="filterPicturesBySelection('other')"> Other</button>
+			</div>
+			<div class="row">
+				<div class="container">
+					<p class="lead" id="gallery-text"> These are photographs related to what I do in my free time. Click any button in the menu to further filter the pictures.</p>
+				</div>
+				<div class="column projects show">
+					<a href="https://github.com/neelbagora/Android-Calculator" target="_blank">
+						<img class="gallery" src="/images/androidcalculator.png" alt="Airplanes" style="height: 100%;">
+					</a>
+					<h4>Android Calculator</h4>
+					<p>This is a basic calculator built using Android and Java.</p>
+					<a href="/images/midi.png" target="_blank">
+						<img class="gallery" src="/images/midi.png" alt="MIDI Playback Program" style="width:100%">
+					</a>
+					<h4>MIDI Playback and Modification Program</h4>
+					<p>Using C, I built a program that is capable of parsing through and modifying MIDI files to change octaves, notes, and other significant events. The GUI was built using GTK.</p>
+					<a href="https://github.com/neelbagora/photoncode" target="_blank">
+						<img class="gallery" src="/images/photoncontroller.jpg" alt="Photon Controller" style="width:100%">
+					</a>
+					<h4>Solar Tracking Weather Station</h4>
+					<p>This project is a solar powered and tracking weather station that reports the weather in the surrounding environment of the device and uploads that data to the Losant cloud platform. It was built using C/C++ on a Photon microcontroller, custom PCB boards, and CAD software.</p>
+					<a href="https://github.com/neelbagora/currency-converter" target="_blank">
+						<img class="gallery" src="/images/currencyconverter.jpg" alt="Currency Converter" style="width:100%">
+					</a>
+					<h4>Currency Converter Java Application</h4>
+					<p>Using Kotlin, I built a web currency converter that uses the fixer.io API to provide real time exchange rates for currency conversion.</p>
+				</div>
+				<div class="column airplanes show">
+					<a href="/images/747-8.png" target="_blank">
+						<img class="gallery" src="/images/747-8.png" alt="Airplanes" style="width:100%">
+					</a>
+					<h4>Lufthansa Boeing 747-8</h4>
+					<p> I was actually learning about this plane so I did not do a full flight with it.</p>
+					<a href="/images/738.png" target="_blank">
+						<img class="gallery" src="/images/738.png" alt="Airplanes" style="width:100%">
+					</a>
+					<h4>Delta Boeing 737-800</h4>
+					<p>I flew this 737-800 as DAL327 from Indianapolis to Washington D.C.</p>
+					<a href="/images/737-800.png" target="_blank">
+						<img class="gallery" src="/images/737-800.png" alt="Airplanes" style="width:100%">
+					</a>
+					<h4>Southwest Boeing 737-800</h4>
+					<p>This flight was flown as SWA642 from San Francisco to San Diego.</p>
+					<a href="/images/777-300ER.png" target="_blank">
+						<img class="gallery" src="/images/777-300ER.png" alt="Airplanes" style="width:100%">
+					</a>
+					<h4>United Boeing 777-300ER</h4>
+					<p>Flew this 777-300ER as UAL642 from Chicago to San Francisco and had to divert to Sacramento because the landing gear did not extend..</p>
+					<a href="/images/A330-200.png" target="_blank">
+						<img class="gallery" src="/images/A330-200.png" alt="Airplanes" style="width:100%">
+					</a>
+					<h4>KLM Airbus A330-200</h4>
+					<p>This was the longest flight I have done up till now, from Aruba to Amsterdam, took almost 10 hours to complete.</p>
+					<a href="/images/767-300F.png" target="_blank">
+						<img class="gallery" src="/images/767-300F.png" alt="Airplanes" style="width:100%">
+					</a>
+					<h4>Fedex Boeing 767-300F</h4>
+					<p>I flew this cargo route from Miami to Atlanta as Fedex 865, then flew from Atlanta to Memphis (Fedex Hub). Total flight time was close to about 5 hours.</p>
+				</div>
+				<div class="column other show">
+					<a href="/images/ham.jpg" target="_blank">
+						<img class="gallery" src="/images/fcclicense.jpg" alt="Other" style="width:100%">
+					</a>
+					<h4>The day I earned my FCC General License.</h4>
+					<p>Through a Satellite Tracking Program at my school, I studied for the FCC General Exam and passed it, allowing me to further transmit on HAM radio.</p>
+					<a href="/images/ham.jpg" target="_blank">
+						<img class="gallery" src="/images/ham.jpg" alt="Other" style="width:100%">
+					</a>
+					<h4>A picture of me operating on HAM radio for the first time.</h4>
+					<p>After several weeks of studying and training, I was finally able to transmit for the first time on HAM radio.</p>
+					<a href="/images/band.jpg" target="_blank">
+						<img class="gallery" src="/images/band.jpg" alt="Other" style="width:100%">
+					</a>
+					<h4>When I played Alto Saxophone in band.</h4>
+					<p>Band was a big part of my life, I played alto saxophone for five years, participating in bands like marching band, concert band, and jazz band.</p>
+				</div>
+			<!-- END GRID -->
+			</div>
+		</div>
+		<div class="main">
+			<h2>LEAVE A COMMENT!</h2>
+			<label for="limit-selector">Number of Comments:</label><br>
+        <select class="custom-select" onchange="selectFunction()" name="limit-selector" id="limit-selector">
+          <option value="0">Select number:</option>  
+        </select>
+        <br>
+        <br>
+			<div id="comments-container"></div>
+			<form name="comment-form" action="/data" method="POST" onsubmit="return validateForm()" required>
+				<label for="fname">First name:</label><br>
+				<input type="text" id="fname" name="fname" value=""><br>
 
-                <label for="lname">Last name:</label><br>
-                <input type="text" id="lname" name="lname" value=""><br><br>
+				<label for="lname">Last name:</label><br>
+				<input type="text" id="lname" name="lname" value=""><br><br>
 
-                <textarea id="message" name="message"></textarea>
-                <input class="submit" type="submit" value="Submit">
-            </form>
-            <br>
-            <br>
-            <br>
-        </div>
-    </body>
+				<textarea id="message" name="message"></textarea>
+				<input class="btn" type="submit" style="float: right;" value="Submit">
+			</form>
+      <button class="btn" onclick="createCommentData(true);" style="float: right;">Refresh</button>
+			<br>
+			<br>
+			<br>
+		</div>
+	</body>
 </html>
