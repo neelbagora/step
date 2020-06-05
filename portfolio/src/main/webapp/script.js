@@ -128,6 +128,11 @@ function createCommentData(firstRun) {
 	});
 }
 
+/*
+ * configureDeleteButton takes in the comment retrieved from server
+ * and appends new button elements within form elements. Delete Button
+ * is used to send post requests to the '/delete-data' url.
+ */
 function configureDeleteButton(comment) {
   var form = document.createElement('form');
   form.method = "POST";
