@@ -100,6 +100,6 @@ public final class UserComment {
 	 * @param name Name that will replace value held by name variable.
 	 */
 	public void setName(String name) {
-			this.name = name;
+		this.name = name;
 	}
 }
