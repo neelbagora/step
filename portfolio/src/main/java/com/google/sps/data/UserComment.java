@@ -3,6 +3,7 @@ package com.google.sps.data;
 import java.util.Date;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 // Class to handle comments being pushed to the server.
 public final class UserComment {
@@ -10,6 +11,8 @@ public final class UserComment {
 	private String name;
 	private String text;
 	private String date;
+  private long originalTimeStamp;
+  private String user_id;
 
 	/**
 	 * Constructor for UserComment Class
@@ -18,13 +21,16 @@ public final class UserComment {
 	 * @param name      String to initialize name instance variable.
 	 * @param text      String to initiailize text instance variable.
 	 * @param timestamp Long value to be converted into readable date format.
+   * @param user_id   String id of original poster.
 	 */
-	public UserComment(long id, String name, String text, long timestamp) {
+	public UserComment(long id, String name, String text, long timestamp, String user_id) {
 		this.id = id;
 		this.name = name;
 		this.text = text; 
 		this.date = convertTime(timestamp);
-	}
+    originalTimeStamp = timestamp;
+    this.user_id = user_id;
+  }
 	
 	/**
 	 * Constructor for UserComment Class
@@ -38,6 +44,7 @@ public final class UserComment {
 		this.name = name;
 		this.text = text;
 		this.date = "0";
+    originalTimeStamp = 0;
 	}
 
 	/**
@@ -49,7 +56,7 @@ public final class UserComment {
 	 * @return          String date converted from long.
 	 */
 	private String convertTime(long timestamp) {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss  a", Locale.US);
 		String timezone = "PST";
 		simpleDateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
 		Date date = new Date(timestamp);
@@ -102,4 +109,20 @@ public final class UserComment {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	/**
+	 * setDate sets the String date associated with the UserComment.
+	 *
+	 * @param name Name that will replace value held by name variable.
+	 */
+  public void setDate(String date) {
+    this.date = date;
+  }
+
+  /**
+	 * returns the String datatype representing the user posting the comment.
+	 */
+  public String getUserId() {
+    return this.user_id;
+  }
 }

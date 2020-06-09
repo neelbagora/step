@@ -10,7 +10,7 @@
 		<script src="script.js"></script>
 	</head>
   <!-- Introduction section of Portfolio website. -->
-  <body onload="createCommentData(true);">
+  <body onload="createCommentData(true); verifyLoginCredentials();">
 		<div class="header">
 			<h1>Neel Bagora</h1>
 		</div>
@@ -20,6 +20,9 @@
 			<a href="https://www.instagram.com/neelbagora" target="_blank" class="instagram"><i class="fa fa-instagram"></i></a>
 			<a href="https://www.linkedin.com/in/neelbagora/" target="_blank" class="linkedin"><i class="fa fa-linkedin"></i></a>
 			<a href="mailto: neelbagora@gmail.com" target="_blank" class="email"><i class="fa fa-envelope"></i></a>
+      <form id="login-form" action="/login" method="post">  
+        <a href="javascript:{}" onclick="document.getElementById('login-form').submit();" class="lock"><i id="lock-image" class="fa fa-lock"></i></a>
+      </form>
 		</div>
 		<div class="container flex-parent" style="background-color: white;">
 			<div class="jumbotron flex-child" style="background-color: white;">
@@ -133,7 +136,7 @@
         <br>
         <br>
 			<div id="comments-container"></div>
-			<form name="comment-form" action="/data" method="POST" onsubmit="return validateForm()" required>
+			<form id="comment-form" name="comment-form" style="display: none;" action="/data" method="POST" onsubmit="return validateForm()" required>
 				<label for="fname">First name:</label><br>
 				<input type="text" id="fname" name="fname" value=""><br>
 
@@ -141,7 +144,7 @@
 				<input type="text" id="lname" name="lname" value=""><br><br>
 
 				<textarea id="message" name="message"></textarea>
-				<input class="btn" type="submit" style="float: right;" value="Submit">
+				<button class="btn" onclick="createCommentData(true); submitForm();" style="float: right;">Submit</button>
 			</form>
       <button class="btn" onclick="createCommentData(true);" style="float: right;">Refresh</button>
 			<br>

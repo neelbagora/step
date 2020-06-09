@@ -19,6 +19,7 @@ const MISCELLANEOUS = "These are pictures that I thought were cool but could not
 const SHOWALL = "These are all the pictures that I have posted on this website, pictures can be filtered using the menu bar above.";
 let url_data = '/data';
 let firstRun = true;
+let userId = undefined;
 
 filterPicturesBySelection("all");
 
@@ -106,15 +107,18 @@ function updateGalleryText(elementName) {
 	}
 }
 
-/*
+/**
  * createCommentData() is the function responsible for obtaining the comment
  * data from the Java servlet and appends data on the 'comments-container' of
  * the html page. Default url is '/data'.
+ *
+ * @param firstRun specifies if the drop down element needs to be rebuilt.
  */
 function createCommentData(firstRun) {
+  var commentForm = document.getElementById('comment-form');
+  commentForm.action = '/data';
   console.log(url_data);
 	fetch(url_data).then(response => response.json()).then((commentData) => {
-		console.log('NEW URL: ' + url_data);
 	  const commentElement = document.getElementById('comments-container');
 		limit = commentData.length;
 		document.getElementById('comments-container').innerHTML = "";
@@ -131,11 +135,20 @@ function createCommentData(firstRun) {
       console.log(comment);
       commentElement.appendChild(createCommentNode(comment.name, comment.text, comment.date));
       var deleteBtn = configureDeleteButton(comment);
-      commentElement.appendChild(deleteBtn);
+      if (deleteBtn != undefined) {
+        commentElement.appendChild(deleteBtn);
+      }
       commentElement.appendChild(document.createElement('hr'));
     }
     firstRun = false;
 	});
+}
+
+/**
+ * function used by buttons to submi the form that is filled out on the HTML.
+ */
+function submitForm() {
+  document.getElementById('comment-form').submit();
 }
 
 /**
@@ -147,17 +160,20 @@ function createCommentData(firstRun) {
  * @return         new button created
  */
 function configureDeleteButton(comment) {
-  var form = document.createElement('form');
-  form.method = "POST";
-  var deleteBtn = document.createElement('input');
-  deleteBtn.className = 'btn';
-  deleteBtn.type = 'submit';
-  deleteBtn.value = 'Delete Comment';
-  deleteBtn.id = comment.id;
-  form.action = '/delete-data?id=' + comment.id;
-  deleteBtn.onclick = "createCommentData();";
-  form.appendChild(deleteBtn);
-  return form;
+  if (comment.user_id === userId) {
+    var form = document.createElement('form');
+    form.method = "POST";
+    var deleteBtn = document.createElement('input');
+    deleteBtn.className = 'btn';
+    deleteBtn.type = 'submit';
+    deleteBtn.value = 'Delete Comment';
+    deleteBtn.id = comment.id;
+    form.action = '/delete-data?id=' + comment.id;
+    deleteBtn.onclick = "createCommentData();";
+    form.appendChild(deleteBtn);
+    return form;
+  }
+  return undefined;
 }
 
 /**
@@ -171,7 +187,7 @@ function selectFunction() {
   }
   url_data = '/data?limit=' + selection;
   createCommentData(false);
-  document.getElementById("comments-container").contentWindow.location.reload(true);
+  //document.getElementById("comments-container").contentWindow.location.reload(true);
 }
 
 /** 
@@ -238,4 +254,19 @@ for (var index = 0; index < btns.length; index++) {
     current[0].className = current[0].className.replace(" active", "");
     this.className += " active";
 	});
+}
+
+
+/**
+ * verifyLoginCredentials is called everytime the body of the DOM loads, it retrieves the JSON
+ * ID from /login and sets the global variable userId to that value, thus indicating that the
+ * page is being viewed by a logged in member. Upon obtaining JSON data, the comment form is
+ * available for the user to use.
+ */
+function verifyLoginCredentials() {
+  fetch('/login').then(response => response.json()).then((login_status) => {
+    userId = login_status;
+    document.getElementById('lock-image').className = 'fa fa-unlock';
+    document.getElementById('comment-form').style.display = 'block';
+  });
 }
