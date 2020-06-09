@@ -137,13 +137,13 @@ public final class DataServlet extends HttpServlet {
     commentEntity.setProperty("name", newComment.getName());
     commentEntity.setProperty("text", newComment.getText());
     commentEntity.setProperty("timestamp", System.currentTimeMillis());
-    commentEntity.setProperty("user", userService.getCurrentUser().getUserId());
+    commentEntity.setProperty("user", userService.getCurrentUser().getEmail());
 
     Entity logEntity = new Entity("Log");
     logEntity.setProperty("name", newComment.getName());
     logEntity.setProperty("text", newComment.getText());
     logEntity.setProperty("timestamp", convertTime(System.currentTimeMillis()));
-    logEntity.setProperty("user", userService.getCurrentUser().getUserId());
+    logEntity.setProperty("user", userService.getCurrentUser().getEmail());
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);

@@ -33,7 +33,7 @@ public final class LoginStatus extends HttpServlet {
     Gson gson = new Gson();
     if (userService.isUserLoggedIn()) {
       response.setContentType("application/json;");
-		  response.getWriter().println(gson.toJson(userService.getCurrentUser().getUserId()));
+		  response.getWriter().println(gson.toJson(userService.getCurrentUser().getEmail()));
     }
     else {
       System.out.println("User is not logged in.");
