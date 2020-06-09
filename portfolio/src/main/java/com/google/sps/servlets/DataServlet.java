@@ -196,9 +196,10 @@ public final class DataServlet extends HttpServlet {
 	 * @return        UserComment constructed from POST request.
 	 */
 	private UserComment parseCommentData(HttpServletRequest request) {
-		return new UserComment(getParameter(request, "fname", "") + " " 
-													+ getParameter(request, "lname", ""), 
-														getParameter(request, "message", ""));
+    String username = getParameter(request, "uname", "");
+    
+		return new UserComment(getParameter(request, "uname", ""), 
+											     getParameter(request, "message", ""));
 	}
 
 	/**

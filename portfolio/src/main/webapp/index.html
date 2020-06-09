@@ -10,7 +10,7 @@
 		<script src="script.js"></script>
 	</head>
   <!-- Introduction section of Portfolio website. -->
-  <body onload="createCommentData(true); verifyLoginCredentials();">
+  <body onload= "verifyLoginCredentials(); createCommentData(true);">
 		<div class="header">
 			<h1>Neel Bagora</h1>
 		</div>
@@ -132,21 +132,20 @@
       <h4 id="sign-in" style="display:block;">To leave a comment, you must sign in by clicking the red lock on the icon bar.</h4>
 			<label for="limit-selector">Number of Comments:</label><br>
         <select class="custom-select" onchange="selectFunction()" name="limit-selector" id="limit-selector">
-          <option value="0">Select number:</option>  
+          <option value="0">Show All Comments:</option>  
         </select>
         <br>
         <br>
 			<div id="comments-container"></div>
 			<form id="comment-form" name="comment-form" style="display: none;" action="/data" method="POST" onsubmit="return validateForm()" required>
-				<label for="fname">First name:</label><br>
-				<input type="text" id="fname" name="fname" value=""><br>
-
-				<label for="lname">Last name:</label><br>
-				<input type="text" id="lname" name="lname" value=""><br><br>
-
+				<input style="display: none;" name = "email" id="email" value = ""/>
+        
+        <label for="uname">Change Username:</label>
+				<input type="text" id="uname" name="uname" value=""><br>
 				<textarea id="message" name="message"></textarea>
 				<button class="btn" onclick="createCommentData(true); submitForm();" style="float: right;">Submit</button>
 			</form>
+      <button class="btn" onclick="" style="float: right;">Change Username</button>
       <button class="btn" onclick="createCommentData(true);" style="float: right;">Refresh</button>
 			<br>
 			<br>

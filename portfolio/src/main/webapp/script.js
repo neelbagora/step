@@ -119,7 +119,7 @@ function createCommentData(firstRun) {
   commentForm.action = '/data';
   if (firstRun) {
     url_data = '/data';
-    document.getElementById('limit-selector').innerHTML = '<option value="0">Select number:</option> ';
+    document.getElementById('limit-selector').innerHTML = '<option value="0">Show All Comments:</option> ';
   }
 	fetch(url_data).then(response => response.json()).then((commentData) => {
 	  const commentElement = document.getElementById('comments-container');
@@ -141,6 +141,12 @@ function createCommentData(firstRun) {
       var deleteBtn = configureDeleteButton(comment);
       if (deleteBtn != undefined) {
         commentElement.appendChild(deleteBtn);
+        if (comment.user_id === userId) {
+          document.getElementById(comment.id).style.display = 'block';
+        }
+        else {
+          document.getElementById(comment.id).style.display = 'none';
+        }
       }
       commentElement.appendChild(document.createElement('hr'));
     }
@@ -152,6 +158,7 @@ function createCommentData(firstRun) {
  * function used by buttons to submit the form that is filled out on the HTML.
  */
 function submitForm() {
+  document.getElementById('email').value = userId;
   document.getElementById('comment-form').submit();
 }
 
@@ -164,20 +171,21 @@ function submitForm() {
  * @return         new button created
  */
 function configureDeleteButton(comment) {
-  if (comment.user_id === userId) {
-    var form = document.createElement('form');
-    form.method = "POST";
-    var deleteBtn = document.createElement('input');
-    deleteBtn.className = 'btn';
-    deleteBtn.type = 'submit';
-    deleteBtn.value = 'Delete Comment';
-    deleteBtn.id = comment.id;
-    form.action = '/delete-data?id=' + comment.id;
-    deleteBtn.onclick = "createCommentData();";
-    form.appendChild(deleteBtn);
-    return form;
-  }
-  return undefined;
+  verifyLoginCredentials();
+  console.log(userId);
+  
+  var form = document.createElement('form');
+  form.method = "POST";
+  var deleteBtn = document.createElement('input');
+  deleteBtn.className = 'btn';
+  deleteBtn.type = 'submit';
+  deleteBtn.value = 'Delete Comment';
+  deleteBtn.id = comment.id;
+  form.action = '/delete-data?id=' + comment.id;
+  deleteBtn.onclick = "createCommentData();";
+  form.appendChild(deleteBtn);
+
+  return deleteBtn;
 }
 
 /**
@@ -187,6 +195,7 @@ function configureDeleteButton(comment) {
 function selectFunction() {
   var selection = document.getElementById("limit-selector").value;
   if (selection == 0) {
+      createCommentData(true);
       return;
   }
   url_data = '/data?limit=' + selection;
