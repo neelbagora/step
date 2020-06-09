@@ -117,7 +117,6 @@ function updateGalleryText(elementName) {
 function createCommentData(firstRun) {
   var commentForm = document.getElementById('comment-form');
   commentForm.action = '/data';
-  console.log(url_data);
 	fetch(url_data).then(response => response.json()).then((commentData) => {
 	  const commentElement = document.getElementById('comments-container');
 		limit = commentData.length;
@@ -145,7 +144,7 @@ function createCommentData(firstRun) {
 }
 
 /**
- * function used by buttons to submi the form that is filled out on the HTML.
+ * function used by buttons to submit the form that is filled out on the HTML.
  */
 function submitForm() {
   document.getElementById('comment-form').submit();
@@ -187,7 +186,6 @@ function selectFunction() {
   }
   url_data = '/data?limit=' + selection;
   createCommentData(false);
-  //document.getElementById("comments-container").contentWindow.location.reload(true);
 }
 
 /** 
@@ -268,5 +266,6 @@ function verifyLoginCredentials() {
     userId = login_status;
     document.getElementById('lock-image').className = 'fa fa-unlock';
     document.getElementById('comment-form').style.display = 'block';
+    document.getElementById('sign-in').style.display = 'none';
   });
 }
