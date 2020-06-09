@@ -117,10 +117,15 @@ function updateGalleryText(elementName) {
 function createCommentData(firstRun) {
   var commentForm = document.getElementById('comment-form');
   commentForm.action = '/data';
+  if (firstRun) {
+    url_data = '/data';
+    document.getElementById('limit-selector').innerHTML = '<option value="0">Select number:</option> ';
+  }
 	fetch(url_data).then(response => response.json()).then((commentData) => {
 	  const commentElement = document.getElementById('comments-container');
 		limit = commentData.length;
 		document.getElementById('comments-container').innerHTML = "";
+
     for (var i = 0; i < commentData.length; i++) {
       if (firstRun) {
           const selector = document.getElementById('limit-selector');
