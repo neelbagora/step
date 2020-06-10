@@ -114,7 +114,7 @@ function updateGalleryText(elementName) {
  */
 function createCommentData(firstRun) {
   var commentForm = document.getElementById('comment-form');
-  commentForm.action = '/data';
+  //commentForm.action = '/data';
   if (firstRun) {
     url_data = '/data';
     document.getElementById('limit-selector').innerHTML = '<option value="0">Show All Comments:</option> ';
@@ -135,17 +135,21 @@ function createCommentData(firstRun) {
       }
       const comment = commentData[i];
       console.log(comment);
-      commentElement.appendChild(createCommentNode(comment.name, comment.text, comment.date));
+      commentElement.appendChild(createCommentNode(comment.name, comment.text, comment.date, comment.id));
+
       var deleteBtn = configureDeleteButton(comment);
-      if (deleteBtn != undefined) {
-        commentElement.appendChild(deleteBtn);
-        console.log(userId);
-        if (comment.user_id === userId) {
-          document.getElementById(comment.id + "form").style.display = 'block';
-        }
-        else {
-          document.getElementById(comment.id + "form").style.display = 'none';
-        }
+      var editBtn = configureEditButton(comment);
+
+      commentElement.appendChild(editBtn);
+      commentElement.appendChild(deleteBtn);
+      console.log(userId);
+      if (comment.user_id === userId) {
+        document.getElementById(comment.id + "form").style.display = 'block';
+        document.getElementById(comment.id + "edit").style.display = 'block';
+      }
+      else {
+        document.getElementById(comment.id + "form").style.display = 'none';
+        document.getElementById(comment.id + "edit").style.display = 'none';
       }
       commentElement.appendChild(document.createElement('hr'));
     }
@@ -175,14 +179,43 @@ function configureDeleteButton(comment) {
   form.method = "POST";
   form.id = comment.id + "form";
   var deleteBtn = document.createElement('input');
-  deleteBtn.className = 'btn';
+  deleteBtn.className = 'delete';
   deleteBtn.type = 'submit';
   deleteBtn.value = 'Delete Comment';
-  deleteBtn.id = comment.id;
+  deleteBtn.id = comment.id + "delete";
   form.action = '/delete-data?id=' + comment.id;
-  deleteBtn.onclick = "createCommentData(true);";
   form.appendChild(deleteBtn);
   return form;
+}
+
+/**
+ * configureEditButton creates the edit button to be appended to the comments.
+ * Only appends edit buttons if user wrote the comment.
+ *
+ * @param comment comment that requires the edit button.
+ */
+function configureEditButton(comment) {
+  var editBtn = document.createElement('button');
+  editBtn.className = 'btn';
+  editBtn.innerText = 'Edit Comment';
+  editBtn.id = comment.id + "edit";
+  editBtn.style.cssFloat = "left";
+  editBtn.setAttribute("onclick", `editComment(${comment.id}, "${comment.text}", "${comment.name}")`);
+  return editBtn;  
+}
+
+/**
+ * editComment is responsible for making visual changes when the edit button
+ * is clicked. Configures form url to be '/edit?id=' + commentId (of corresponding comment)
+ *
+ * @param commenId    comment id belonging to the respective comment.
+ * @param commentText comment text that is being edited.
+ * @param commentName Name of poster posting comments.
+ */
+function editComment(commentId, commentText, commentName) {
+  document.getElementById('comment-form').action = '/edit?id=' + commentId;
+  document.getElementById('message').value = commentText;
+  document.getElementById('uname').value = commentName;
 }
 
 /**
@@ -238,7 +271,7 @@ function validateForm() {
  * @param date Date of the comment.
  * @return     CommentNode that is created by the supplying information.
  */
-function createCommentNode(name, text, date) {
+function createCommentNode(name, text, date, id) {
 	const commentNode = document.createElement('div');
 	commentNode.className = "comment";
 	const nameNode = document.createElement('h4');
@@ -246,7 +279,8 @@ function createCommentNode(name, text, date) {
 	const dateNode = document.createElement('h5');
 	dateNode.innerText = date;
 	const textNode = document.createElement('h5');
-	textNode.innerText = text;        
+	textNode.innerText = text;    
+  commentNode.id = id;
 	commentNode.appendChild(nameNode);
 	commentNode.appendChild(dateNode);
 	commentNode.appendChild(textNode);

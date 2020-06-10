@@ -22,8 +22,30 @@ public final class UserComment {
 	 * @param text      String to initiailize text instance variable.
 	 * @param timestamp Long value to be converted into readable date format.
    * @param user_id   String id of original poster.
+   * @param edited   boolean representing if the comment is edited.
 	 */
-	public UserComment(long id, String name, String text, long timestamp, String user_id) {
+	public UserComment(long id, String name, String text, long timestamp, String user_id, boolean edited) {
+		this.id = id;
+		this.name = name;
+		this.text = text; 
+		this.date = convertTime(timestamp);
+    if (edited) {
+      this.date = "Edited on " + this.date;
+    }
+    originalTimeStamp = timestamp;
+    this.user_id = user_id;
+  }
+
+	/**
+	 * Constructor for UserComment Class
+	 *
+	 * @param id        Long to initialize (server) id instance variable.
+	 * @param name      String to initialize name instance variable.
+	 * @param text      String to initiailize text instance variable.
+	 * @param timestamp Long value to be converted into readable date format.
+   * @param user_id   String id of original poster.
+	 */
+  public UserComment(long id, String name, String text, long timestamp, String user_id) {
 		this.id = id;
 		this.name = name;
 		this.text = text; 

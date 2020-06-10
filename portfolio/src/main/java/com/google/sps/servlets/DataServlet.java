@@ -71,30 +71,6 @@ public final class DataServlet extends HttpServlet {
         limit = 10;
       }
     }
-    
-    long requested_id;
-    if (request.getParameter("id") != null) {
-      try {
-        requested_id = Long.parseLong(request.getParameter("id"));
-      } catch (NumberFormatException e) {
-        requested_id = 0;
-      }
-      for (Entity entity : results.asIterable()) {
-        if (entity.getKey().getId() == requested_id) {
-          String name = (String) entity.getProperty("name");
-          String message = (String) entity.getProperty("text");
-          long timestamp = (long) entity.getProperty("timestamp");
-          String user_id = (String) entity.getProperty("user");
-
-          UserComment userComment = new UserComment(requested_id, name, message, timestamp, user_id);
-          String jsonData = new Gson().toJson(userComment);
-          
-          response.setContentType("application/json;");
-          response.getWriter().println(jsonData);
-          return;
-        }
-      }
-    }
 
 		int counter = 0;
 		for (Entity entity : results.asIterable()) {
@@ -107,8 +83,9 @@ public final class DataServlet extends HttpServlet {
 			String message = (String) entity.getProperty("text");
 			long timestamp = (long) entity.getProperty("timestamp");
       String user_id = (String) entity.getProperty("user");
+      boolean edited = (boolean) entity.getProperty("edited");
 
-      UserComment userComment = new UserComment(id, name, message, timestamp, user_id);
+      UserComment userComment = new UserComment(id, name, message, timestamp, user_id, edited);
 			comments.add(userComment);
 		}
 
@@ -138,6 +115,7 @@ public final class DataServlet extends HttpServlet {
     commentEntity.setProperty("text", newComment.getText());
     commentEntity.setProperty("timestamp", System.currentTimeMillis());
     commentEntity.setProperty("user", userService.getCurrentUser().getEmail());
+    commentEntity.setProperty("edited", false);
 
     Entity logEntity = new Entity("Log");
     logEntity.setProperty("name", newComment.getName());
@@ -164,8 +142,10 @@ public final class DataServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     ipEntity.setProperty("ip", ipAddress);
     ipEntity.setProperty("timestamp", convertTime(System.currentTimeMillis()));
-    if (userService.getCurrentUser().getUserId() != null) {
-      ipEntity.setProperty("user", userService.getCurrentUser().getUserId());
+    if (userService.isUserLoggedIn()) {
+      if (userService.getCurrentUser().getUserId() != null) {
+        ipEntity.setProperty("user", userService.getCurrentUser().getUserId());
+      }
     }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(ipEntity);
