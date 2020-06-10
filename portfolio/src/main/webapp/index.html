@@ -141,7 +141,7 @@
 			<form id="comment-form" name="comment-form" style="display: none;" action="/data" method="POST" onsubmit="return validateForm()" required>
 				<input style="display: none;" name = "email" id="email" value = ""/>
         
-        <label id="uname-label" style="display: none;" for="uname">New Username (Only applies if you submit a comment - Default username is the email username before @): </label>
+        <label id="uname-label" style="display: none;" for="uname">New Username (Only applies if you submit or edit a comment - Default username is the email username before @): </label>
 				<input type="text" style="display: none;" id="uname" name="uname" value=""><br>
 				<textarea id="message" name="message"></textarea>
 				<button class="btn" onclick="createCommentData(true); submitForm();" style="float: right;">Submit</button>
