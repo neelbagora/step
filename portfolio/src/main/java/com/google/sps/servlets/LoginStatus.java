@@ -36,7 +36,8 @@ public final class LoginStatus extends HttpServlet {
 		  response.getWriter().println(gson.toJson(userService.getCurrentUser().getEmail()));
     }
     else {
-      System.out.println("User is not logged in.");
+      String loginUrl = userService.createLoginURL("/index.html");
+      response.sendRedirect(loginUrl);
     }
   }
 
