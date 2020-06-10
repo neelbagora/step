@@ -189,8 +189,11 @@ public final class DataServlet extends HttpServlet {
 
   /**
 	 * parseCommentData takes in an HttpServletRequest from the HTML form
-	 * and parses relevant information such as first name, last name, and
-	 * message.
+	 * and parses relevant information such as nickname, and
+	 * message. If client sends "" as username, the default ldap is used if no
+   * nickname is set. If nickname is set, then the comments are associated with
+   * that nickname. Updates all entities in the datastore to match new nickname if
+   * applicable
 	 *
 	 * @param request HttpServletRequest used to obtain data from POST request
 	 * @return        UserComment constructed from POST request.
