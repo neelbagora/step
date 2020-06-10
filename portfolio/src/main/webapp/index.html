@@ -10,7 +10,7 @@
 		<script src="script.js"></script>
 	</head>
   <!-- Introduction section of Portfolio website. -->
-  <body onload="createCommentData(true);">
+  <body onload= "verifyLoginCredentials()">
 		<div class="header">
 			<h1>Neel Bagora</h1>
 		</div>
@@ -20,6 +20,9 @@
 			<a href="https://www.instagram.com/neelbagora" target="_blank" class="instagram"><i class="fa fa-instagram"></i></a>
 			<a href="https://www.linkedin.com/in/neelbagora/" target="_blank" class="linkedin"><i class="fa fa-linkedin"></i></a>
 			<a href="mailto: neelbagora@gmail.com" target="_blank" class="email"><i class="fa fa-envelope"></i></a>
+      <form id="login-form" action="/login" method="post">  
+        <a href="javascript:{}" onclick="document.getElementById('login-form').submit();" class="lock"><i id="lock-image" class="fa fa-lock"></i></a>
+      </form>
 		</div>
 		<div class="container flex-parent" style="background-color: white;">
 			<div class="jumbotron flex-child" style="background-color: white;">
@@ -126,25 +129,26 @@
 		</div>
 		<div class="main">
 			<h2>LEAVE A COMMENT!</h2>
-			<label for="limit-selector">Number of Comments:</label><br>
+      <h4 id="sign-in" style="display:block;">To leave a comment, you must sign in by clicking the red lock on the icon bar.</h4>
+			<br>
+      <label for="limit-selector">Number of Comments:</label><br>
         <select class="custom-select" onchange="selectFunction()" name="limit-selector" id="limit-selector">
-          <option value="0">Select number:</option>  
+          <option value="0">Show All Comments:</option>  
         </select>
         <br>
         <br>
 			<div id="comments-container"></div>
-			<form name="comment-form" action="/data" method="POST" onsubmit="return validateForm()" required>
-				<label for="fname">First name:</label><br>
-				<input type="text" id="fname" name="fname" value=""><br>
-
-				<label for="lname">Last name:</label><br>
-				<input type="text" id="lname" name="lname" value=""><br><br>
-
+			<form id="comment-form" name="comment-form" style="display: none;" action="/data" method="POST" onsubmit="return validateForm()" required>
+				<input style="display: none;" name = "email" id="email" value = ""/>
+        
+        <label id="uname-label" style="display: none;" for="uname">New Username (Only applies if you submit a comment - Default username is the email username before @): </label>
+				<input type="text" style="display: none;" id="uname" name="uname" value=""><br>
 				<textarea id="message" name="message"></textarea>
-				<input class="btn" type="submit" style="float: right;" value="Submit">
+				<button class="btn" onclick="createCommentData(true); submitForm();" style="float: right;">Submit</button>
 			</form>
       <button class="btn" onclick="createCommentData(true);" style="float: right;">Refresh</button>
-			<br>
+			<button class="btn"  id="change-user" style="display: none;" onclick="editNickName();" style="float: right;">Change Username</button>
+      <br>
 			<br>
 			<br>
 		</div>

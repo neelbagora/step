@@ -30,7 +30,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.Locale;
 import java.text.SimpleDateFormat;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 // Handles comment data on the '/data' page.
 @WebServlet("/data")
@@ -68,10 +71,34 @@ public final class DataServlet extends HttpServlet {
         limit = 10;
       }
     }
+    
+    long requested_id;
+    if (request.getParameter("id") != null) {
+      try {
+        requested_id = Long.parseLong(request.getParameter("id"));
+      } catch (NumberFormatException e) {
+        requested_id = 0;
+      }
+      for (Entity entity : results.asIterable()) {
+        if (entity.getKey().getId() == requested_id) {
+          String name = (String) entity.getProperty("name");
+          String message = (String) entity.getProperty("text");
+          long timestamp = (long) entity.getProperty("timestamp");
+          String user_id = (String) entity.getProperty("user");
+
+          UserComment userComment = new UserComment(requested_id, name, message, timestamp, user_id);
+          String jsonData = new Gson().toJson(userComment);
+          
+          response.setContentType("application/json;");
+          response.getWriter().println(jsonData);
+          return;
+        }
+      }
+    }
 
 		int counter = 0;
 		for (Entity entity : results.asIterable()) {
-            if (counter >= limit) {
+      if (counter >= limit) {
 				break;
 			}
 			counter++;
@@ -79,8 +106,9 @@ public final class DataServlet extends HttpServlet {
 			String name = (String) entity.getProperty("name");
 			String message = (String) entity.getProperty("text");
 			long timestamp = (long) entity.getProperty("timestamp");
+      String user_id = (String) entity.getProperty("user");
 
-      UserComment userComment = new UserComment(id, name, message, timestamp);
+      UserComment userComment = new UserComment(id, name, message, timestamp, user_id);
 			comments.add(userComment);
 		}
 
@@ -101,25 +129,28 @@ public final class DataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			// Get the input from the form.
-			UserComment newComment = parseCommentData(request);
+    // Get the input from the form.
+    UserComment newComment = parseCommentData(request);
+    UserService userService = UserServiceFactory.getUserService();
 
-			Entity commentEntity = new Entity("Comment");
-			commentEntity.setProperty("name", newComment.getName());
-			commentEntity.setProperty("text", newComment.getText());
-			commentEntity.setProperty("timestamp", System.currentTimeMillis());
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("name", newComment.getName());
+    commentEntity.setProperty("text", newComment.getText());
+    commentEntity.setProperty("timestamp", System.currentTimeMillis());
+    commentEntity.setProperty("user", userService.getCurrentUser().getEmail());
 
-			Entity logEntity = new Entity("Log");
-			logEntity.setProperty("name", newComment.getName());
-			logEntity.setProperty("text", newComment.getText());
-			logEntity.setProperty("timestamp", System.currentTimeMillis());
+    Entity logEntity = new Entity("Log");
+    logEntity.setProperty("name", newComment.getName());
+    logEntity.setProperty("text", newComment.getText());
+    logEntity.setProperty("timestamp", convertTime(System.currentTimeMillis()));
+    logEntity.setProperty("user", userService.getCurrentUser().getEmail());
 
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			datastore.put(commentEntity);
-      datastore.put(logEntity);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
+    datastore.put(logEntity);
 
-			// Respond with the result.
-			response.sendRedirect("/index.html");
+    // Respond with the result.
+    response.sendRedirect("/index.html");
   }
 
   /**
@@ -130,8 +161,12 @@ public final class DataServlet extends HttpServlet {
    */
   private void postIpAddress(String ipAddress) {
     Entity ipEntity = new Entity("IPAddress");
+    UserService userService = UserServiceFactory.getUserService();
     ipEntity.setProperty("ip", ipAddress);
     ipEntity.setProperty("timestamp", convertTime(System.currentTimeMillis()));
+    if (userService.getCurrentUser().getUserId() != null) {
+      ipEntity.setProperty("user", userService.getCurrentUser().getUserId());
+    }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(ipEntity);
   }
@@ -145,7 +180,7 @@ public final class DataServlet extends HttpServlet {
    * @return          String date converted from long.
    */
 	private String convertTime(long timestamp) {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.US);
 		String timezone = "PST";
 		simpleDateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
 		Date date = new Date(timestamp);
@@ -154,16 +189,46 @@ public final class DataServlet extends HttpServlet {
 
   /**
 	 * parseCommentData takes in an HttpServletRequest from the HTML form
-	 * and parses relevant information such as first name, last name, and
-	 * message.
+	 * and parses relevant information such as nickname, and
+	 * message. If client sends "" as username, the default ldap is used if no
+   * nickname is set. If nickname is set, then the comments are associated with
+   * that nickname. Updates all entities in the datastore to match new nickname if
+   * applicable
 	 *
 	 * @param request HttpServletRequest used to obtain data from POST request
 	 * @return        UserComment constructed from POST request.
 	 */
 	private UserComment parseCommentData(HttpServletRequest request) {
-		return new UserComment(getParameter(request, "fname", "") + " " 
-													+ getParameter(request, "lname", ""), 
-														getParameter(request, "message", ""));
+    String username = getParameter(request, "uname", "");
+    UserService userService = UserServiceFactory.getUserService();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("UserData").addFilter("email", Query.FilterOperator.EQUAL, getParameter(request, "email", ""));
+    PreparedQuery results = datastore.prepare(query);
+    if (results.asSingleEntity() == null) {
+      Entity entity = new Entity("UserData");
+      entity.setProperty("email", userService.getCurrentUser().getEmail());
+      if (username.equals("")) {
+        username = userService.getCurrentUser().getEmail().substring(0, userService.getCurrentUser().getEmail().indexOf("@"));
+      }
+      entity.setProperty("nickname", username);
+      datastore.put(entity);
+    }
+    else if (!username.equals("")) {
+      Entity entity = results.asSingleEntity();
+      entity.setProperty("nickname", username);
+      datastore.put(entity);
+      query = new Query("Comment").addFilter("user", Query.FilterOperator.EQUAL, userService.getCurrentUser().getEmail());
+      results = datastore.prepare(query);
+      for (Entity commentEntity : results.asIterable()) {
+        commentEntity.setProperty("name", username);
+        datastore.put(commentEntity);
+      }
+    }
+    else {
+      username = (String) results.asSingleEntity().getProperty("nickname");
+    }
+
+		return new UserComment(username, getParameter(request, "message", ""));
 	}
 
 	/**

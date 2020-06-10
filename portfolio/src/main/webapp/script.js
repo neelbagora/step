@@ -18,9 +18,8 @@ const PROJECTS = "These are pictures of the projects I have worked on throughout
 const MISCELLANEOUS = "These are pictures that I thought were cool but could not categorize.";
 const SHOWALL = "These are all the pictures that I have posted on this website, pictures can be filtered using the menu bar above.";
 let url_data = '/data';
-let firstRun = true;
+let userId = undefined;
 
-filterPicturesBySelection("all");
 
 /**
  * filterPicturesBySelection is a function responsible for updating
@@ -106,18 +105,25 @@ function updateGalleryText(elementName) {
 	}
 }
 
-/*
+/**
  * createCommentData() is the function responsible for obtaining the comment
  * data from the Java servlet and appends data on the 'comments-container' of
  * the html page. Default url is '/data'.
+ *
+ * @param firstRun specifies if the drop down element needs to be rebuilt.
  */
 function createCommentData(firstRun) {
-  console.log(url_data);
-	fetch(url_data).then(response => response.json()).then((commentData) => {
-		console.log('NEW URL: ' + url_data);
+  var commentForm = document.getElementById('comment-form');
+  commentForm.action = '/data';
+  if (firstRun) {
+    url_data = '/data';
+    document.getElementById('limit-selector').innerHTML = '<option value="0">Show All Comments:</option> ';
+  }
+  fetch(url_data).then(response => response.json()).then((commentData) => {
 	  const commentElement = document.getElementById('comments-container');
 		limit = commentData.length;
 		document.getElementById('comments-container').innerHTML = "";
+
     for (var i = 0; i < commentData.length; i++) {
       if (firstRun) {
           const selector = document.getElementById('limit-selector');
@@ -131,11 +137,28 @@ function createCommentData(firstRun) {
       console.log(comment);
       commentElement.appendChild(createCommentNode(comment.name, comment.text, comment.date));
       var deleteBtn = configureDeleteButton(comment);
-      commentElement.appendChild(deleteBtn);
+      if (deleteBtn != undefined) {
+        commentElement.appendChild(deleteBtn);
+        console.log(userId);
+        if (comment.user_id === userId) {
+          document.getElementById(comment.id + "form").style.display = 'block';
+        }
+        else {
+          document.getElementById(comment.id + "form").style.display = 'none';
+        }
+      }
       commentElement.appendChild(document.createElement('hr'));
     }
-    firstRun = false;
 	});
+
+}
+
+/**
+ * function used by buttons to submit the form that is filled out on the HTML.
+ */
+function submitForm() {
+  document.getElementById('email').value = userId;
+  document.getElementById('comment-form').submit();
 }
 
 /**
@@ -147,15 +170,17 @@ function createCommentData(firstRun) {
  * @return         new button created
  */
 function configureDeleteButton(comment) {
+  console.log(userId);
   var form = document.createElement('form');
   form.method = "POST";
+  form.id = comment.id + "form";
   var deleteBtn = document.createElement('input');
   deleteBtn.className = 'btn';
   deleteBtn.type = 'submit';
   deleteBtn.value = 'Delete Comment';
   deleteBtn.id = comment.id;
   form.action = '/delete-data?id=' + comment.id;
-  deleteBtn.onclick = "createCommentData();";
+  deleteBtn.onclick = "createCommentData(true);";
   form.appendChild(deleteBtn);
   return form;
 }
@@ -167,11 +192,11 @@ function configureDeleteButton(comment) {
 function selectFunction() {
   var selection = document.getElementById("limit-selector").value;
   if (selection == 0) {
+      createCommentData(true);
       return;
   }
   url_data = '/data?limit=' + selection;
   createCommentData(false);
-  document.getElementById("comments-container").contentWindow.location.reload(true);
 }
 
 /** 
@@ -238,4 +263,28 @@ for (var index = 0; index < btns.length; index++) {
     current[0].className = current[0].className.replace(" active", "");
     this.className += " active";
 	});
+}
+
+
+/**
+ * verifyLoginCredentials is called everytime the body of the DOM loads, it retrieves the JSON
+ * ID from /login and sets the global variable userId to that value, thus indicating that the
+ * page is being viewed by a logged in member. Upon obtaining JSON data, the comment form is
+ * available for the user to use.
+ */
+function verifyLoginCredentials() {
+  fetch('/login').then(response => response.json()).then((login_status) => {
+    userId = login_status;
+    document.getElementById('lock-image').className = 'fa fa-unlock';
+    document.getElementById('comment-form').style.display = 'block';
+    document.getElementById('sign-in').style.display = 'none';
+    document.getElementById('change-user').style.display = 'block';
+    createCommentData(true);
+    return;
+  });
+}
+
+function editNickName() {
+  document.getElementById('uname-label').style.display = 'block';
+  document.getElementById('uname').style.display = 'block';
 }
