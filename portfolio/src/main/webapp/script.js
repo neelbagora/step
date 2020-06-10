@@ -282,6 +282,7 @@ function verifyLoginCredentials() {
     createCommentData(true);
     return;
   });
+  createCommentData(false);
 }
 
 function editNickName() {
