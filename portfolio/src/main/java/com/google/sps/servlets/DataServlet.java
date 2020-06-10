@@ -197,9 +197,35 @@ public final class DataServlet extends HttpServlet {
 	 */
 	private UserComment parseCommentData(HttpServletRequest request) {
     String username = getParameter(request, "uname", "");
-    
-		return new UserComment(getParameter(request, "uname", ""), 
-											     getParameter(request, "message", ""));
+    UserService userService = UserServiceFactory.getUserService();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("UserData").addFilter("email", Query.FilterOperator.EQUAL, getParameter(request, "email", ""));
+    PreparedQuery results = datastore.prepare(query);
+    if (results.asSingleEntity() == null) {
+      Entity entity = new Entity("UserData");
+      entity.setProperty("email", userService.getCurrentUser().getEmail());
+      if (username.equals("")) {
+        username = userService.getCurrentUser().getEmail().substring(0, userService.getCurrentUser().getEmail().indexOf("@"));
+      }
+      entity.setProperty("nickname", username);
+      datastore.put(entity);
+    }
+    else if (!username.equals("")) {
+      Entity entity = results.asSingleEntity();
+      entity.setProperty("nickname", username);
+      datastore.put(entity);
+      query = new Query("Comment").addFilter("user", Query.FilterOperator.EQUAL, userService.getCurrentUser().getEmail());
+      results = datastore.prepare(query);
+      for (Entity commentEntity : results.asIterable()) {
+        commentEntity.setProperty("name", username);
+        datastore.put(commentEntity);
+      }
+    }
+    else {
+      username = (String) results.asSingleEntity().getProperty("nickname");
+    }
+
+		return new UserComment(username, getParameter(request, "message", ""));
 	}
 
 	/**

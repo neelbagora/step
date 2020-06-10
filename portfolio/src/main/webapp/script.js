@@ -18,10 +18,8 @@ const PROJECTS = "These are pictures of the projects I have worked on throughout
 const MISCELLANEOUS = "These are pictures that I thought were cool but could not categorize.";
 const SHOWALL = "These are all the pictures that I have posted on this website, pictures can be filtered using the menu bar above.";
 let url_data = '/data';
-let firstRun = true;
 let userId = undefined;
 
-filterPicturesBySelection("all");
 
 /**
  * filterPicturesBySelection is a function responsible for updating
@@ -121,7 +119,7 @@ function createCommentData(firstRun) {
     url_data = '/data';
     document.getElementById('limit-selector').innerHTML = '<option value="0">Show All Comments:</option> ';
   }
-	fetch(url_data).then(response => response.json()).then((commentData) => {
+  fetch(url_data).then(response => response.json()).then((commentData) => {
 	  const commentElement = document.getElementById('comments-container');
 		limit = commentData.length;
 		document.getElementById('comments-container').innerHTML = "";
@@ -141,17 +139,18 @@ function createCommentData(firstRun) {
       var deleteBtn = configureDeleteButton(comment);
       if (deleteBtn != undefined) {
         commentElement.appendChild(deleteBtn);
+        console.log(userId);
         if (comment.user_id === userId) {
-          document.getElementById(comment.id).style.display = 'block';
+          document.getElementById(comment.id + "form").style.display = 'block';
         }
         else {
-          document.getElementById(comment.id).style.display = 'none';
+          document.getElementById(comment.id + "form").style.display = 'none';
         }
       }
       commentElement.appendChild(document.createElement('hr'));
     }
-    firstRun = false;
 	});
+
 }
 
 /**
@@ -171,21 +170,19 @@ function submitForm() {
  * @return         new button created
  */
 function configureDeleteButton(comment) {
-  verifyLoginCredentials();
   console.log(userId);
-  
   var form = document.createElement('form');
   form.method = "POST";
+  form.id = comment.id + "form";
   var deleteBtn = document.createElement('input');
   deleteBtn.className = 'btn';
   deleteBtn.type = 'submit';
   deleteBtn.value = 'Delete Comment';
   deleteBtn.id = comment.id;
   form.action = '/delete-data?id=' + comment.id;
-  deleteBtn.onclick = "createCommentData();";
+  deleteBtn.onclick = "createCommentData(true);";
   form.appendChild(deleteBtn);
-
-  return deleteBtn;
+  return form;
 }
 
 /**
@@ -281,5 +278,14 @@ function verifyLoginCredentials() {
     document.getElementById('lock-image').className = 'fa fa-unlock';
     document.getElementById('comment-form').style.display = 'block';
     document.getElementById('sign-in').style.display = 'none';
+    document.getElementById('change-user').style.display = 'block';
+    createCommentData(true);
+    return;
   });
+  //createCommentData(true);
+}
+
+function editNickName() {
+  document.getElementById('uname-label').style.display = 'block';
+  document.getElementById('uname').style.display = 'block';
 }
