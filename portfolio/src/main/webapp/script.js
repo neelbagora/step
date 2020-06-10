@@ -115,23 +115,29 @@ function updateGalleryText(elementName) {
 function createCommentData(firstRun) {
   var commentForm = document.getElementById('comment-form');
   //commentForm.action = '/data';
-  if (firstRun) {
-    url_data = '/data';
-    document.getElementById('limit-selector').innerHTML = '<option value="0">Show All Comments:</option> ';
-  }
+
   fetch(url_data).then(response => response.json()).then((commentData) => {
 	  const commentElement = document.getElementById('comments-container');
 		limit = commentData.length;
 		document.getElementById('comments-container').innerHTML = "";
-
+    if (firstRun) {
+      url_data = '/data';
+      document.getElementById('limit-selector').innerHTML = "";
+    }
     for (var i = 0; i < commentData.length; i++) {
-      if (firstRun) {
-          const selector = document.getElementById('limit-selector');
-          const child = document.createElement('option');
-          child.innerText = i + 1;
-          child.value = i + 1;
-          child.className = ''
-          selector.appendChild(child);
+      if (firstRun) {        
+        const selector = document.getElementById('limit-selector');
+        if (i == 0) {
+          const zero = document.createElement('option');
+          zero.innerText = 'Show All Comments';
+          zero.value = 0;
+          selector.appendChild(zero);
+        }
+        const child = document.createElement('option');
+        child.innerText = i + 1;
+        child.value = i + 1;
+        child.className = ''
+        selector.appendChild(child);
       }
       const comment = commentData[i];
       console.log(comment);
@@ -225,8 +231,9 @@ function editComment(commentId, commentText, commentName) {
 function selectFunction() {
   var selection = document.getElementById("limit-selector").value;
   if (selection == 0) {
-      createCommentData(true);
-      return;
+    url_data = '/data';
+    createCommentData(false);
+    return;
   }
   url_data = '/data?limit=' + selection;
   createCommentData(false);
@@ -316,7 +323,7 @@ function verifyLoginCredentials() {
     createCommentData(true);
     return;
   });
-  createCommentData(false);
+  createCommentData(true);
 }
 
 function editNickName() {
