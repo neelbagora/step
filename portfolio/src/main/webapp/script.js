@@ -114,13 +114,12 @@ function updateGalleryText(elementName) {
  */
 function createCommentData(firstRun) {
   var commentForm = document.getElementById('comment-form');
-  //commentForm.action = '/data';
 
   fetch(url_data).then(response => response.json()).then((commentData) => {
 	  const commentElement = document.getElementById('comments-container');
 		limit = commentData.length;
 		document.getElementById('comments-container').innerHTML = "";
-    if (firstRun) {
+    if ((firstRun) && (commentData.length != 0)) {
       url_data = '/data';
       document.getElementById('limit-selector').innerHTML = "";
     }
@@ -141,7 +140,7 @@ function createCommentData(firstRun) {
       }
       const comment = commentData[i];
       console.log(comment);
-      commentElement.appendChild(createCommentNode(comment.name, comment.text, comment.date, comment.id));
+      commentElement.appendChild(createCommentNode(comment.name, comment.text, comment.date, comment.id, comment.imageUrl));
 
       var deleteBtn = configureDeleteButton(comment);
       var editBtn = configureEditButton(comment);
@@ -160,7 +159,6 @@ function createCommentData(firstRun) {
       commentElement.appendChild(document.createElement('hr'));
     }
 	});
-
 }
 
 /**
@@ -219,9 +217,20 @@ function configureEditButton(comment) {
  * @param commentName Name of poster posting comments.
  */
 function editComment(commentId, commentText, commentName) {
-  document.getElementById('comment-form').action = '/edit?id=' + commentId;
+  let editUrl = '/images?edit=true&id=' + commentId
+  fetch(editUrl).then(response => response.json()).then((imageUrl) => {
+    document.getElementById('comment-form').action = imageUrl;
+  });
+  document.getElementById('message-label').innerText = 'Editing:'
   document.getElementById('message').value = commentText;
   document.getElementById('uname').value = commentName;
+  document.getElementById('cancel-changes').style.display = 'block';
+}
+
+function cancelChanges() {
+  document.getElementById('message').value = "";
+  document.getElementById('uname').value = "";
+  initializeCommentForm();
 }
 
 /**
@@ -232,7 +241,7 @@ function selectFunction() {
   var selection = document.getElementById("limit-selector").value;
   if (selection == 0) {
     url_data = '/data';
-    createCommentData(false);
+    createCommentData(true);
     return;
   }
   url_data = '/data?limit=' + selection;
@@ -278,7 +287,7 @@ function validateForm() {
  * @param date Date of the comment.
  * @return     CommentNode that is created by the supplying information.
  */
-function createCommentNode(name, text, date, id) {
+function createCommentNode(name, text, date, id, imageUrl) {
 	const commentNode = document.createElement('div');
 	commentNode.className = "comment";
 	const nameNode = document.createElement('h4');
@@ -291,6 +300,11 @@ function createCommentNode(name, text, date, id) {
 	commentNode.appendChild(nameNode);
 	commentNode.appendChild(dateNode);
 	commentNode.appendChild(textNode);
+  if (imageUrl) {
+    const imageBox = document.createElement('img');
+    imageBox.src = imageUrl;
+    commentNode.appendChild(imageBox);
+  }
 	
 	return commentNode;
 }
@@ -324,6 +338,13 @@ function verifyLoginCredentials() {
     return;
   });
   createCommentData(true);
+}
+
+function initializeCommentForm() {
+  fetch('/images').then(response => response.json()).then((imageUrl) => {
+    document.getElementById('comment-form').action = imageUrl;
+    document.getElementById('comment-form').enctype = "multipart/form-data";
+  });
 }
 
 function editNickName() {

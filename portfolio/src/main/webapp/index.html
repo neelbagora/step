@@ -10,7 +10,7 @@
 		<script src="script.js"></script>
 	</head>
   <!-- Introduction section of Portfolio website. -->
-  <body onload= "verifyLoginCredentials();">
+  <body onload= "verifyLoginCredentials(); initializeCommentForm();">
 		<div class="header">
 			<h1>Neel Bagora</h1>
 		</div>
@@ -29,7 +29,7 @@
 				<h2 class="display-4">Welcome!</h2>
 				<p class="lead">I am a rising sophomore studying Computer Science and Data Science at Purdue University. In my free time, I love flying commercial aircraft on flight simulators and playing basketball.</p>
 				<hr class="my-4">
-				<p>Below you will find information about the projects I have worked on, planes that I have flown on my simulator, and pictures of cool things I have done. Enjoy!</p>
+				<p>Below you will information about the projects I have worked on, planes that I have flown on my simulator, and pictures of cool things I have done. Enjoy!</p>
 				<hr class="my-4">
 			</div>
 			<div class="jumbotron flex-child" style="background-color: white;">
@@ -133,21 +133,25 @@
 			<br>
       <label for="limit-selector">Number of Comments:</label><br>
         <select class="custom-select" onchange="selectFunction()" name="limit-selector" id="limit-selector">
-          <option value="0">Show All Comments:</option>  
+          <option value="-1">No Comments</option>  
         </select>
         <br>
         <br>
 			<div id="comments-container"></div>
 			<form id="comment-form" name="comment-form" style="display: none;" action="/data" method="POST" onsubmit="return validateForm()" required>
-				<input style="display: none;" name = "email" id="email" value = ""/>
+				<input style="display: none;" name="email" id="email" value = ""/>
         
         <label id="uname-label" style="display: none;" for="uname">New Username (Only applies if you submit or edit a comment - Default username is the email username before @): </label>
 				<input type="text" style="display: none;" id="uname" name="uname" value=""><br>
-				<textarea id="message" name="message"></textarea>
+				<label id="message-label" for="message">Message:</label>
+        <textarea id="message" name="message"></textarea>
+        <label for="image">Upload Image:</label>
+        <input id="image-uploader" type="file" id="image" name="image">
 				<button class="btn" onclick="createCommentData(true); submitForm();" style="float: right;">Submit</button>
 			</form>
-      <button class="btn" onclick="createCommentData(true);" style="float: right;">Refresh</button>
+      <button class="btn" onclick="createCommentData(false);" style="float: right;">Refresh</button>
 			<button class="btn"  id="change-user" style="display: none;" onclick="editNickName();" style="float: right;">Change Username</button>
+      <button class="btn"  id="cancel-changes" style="display: none;" onclick="cancelChanges();" style="float: left;">Cancel Changes</button>
       <br>
 			<br>
 			<br>

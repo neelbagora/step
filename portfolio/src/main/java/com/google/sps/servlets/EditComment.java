@@ -1,3 +1,6 @@
+package com.google.sps.servlets;
+
+import com.google.sps.servlets.DataServlet;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -66,6 +69,7 @@ public final class EditComment extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("UserData").addFilter("email", Query.FilterOperator.EQUAL, request.getParameter("email"));
     PreparedQuery results = datastore.prepare(query);
+    String imageUrl = new DataServlet().getUploadedFileUrl(request, "image");
     if (!username.equals("")) {
       Entity entity = results.asSingleEntity();
       entity.setProperty("nickname", username);
@@ -74,6 +78,9 @@ public final class EditComment extends HttpServlet {
       results = datastore.prepare(query);
       for (Entity commentEntity : results.asIterable()) {
         commentEntity.setProperty("name", username);
+        if (imageUrl != null) {
+          commentEntity.setProperty("image-url", imageUrl);
+        } 
         datastore.put(commentEntity);
       }
     }
