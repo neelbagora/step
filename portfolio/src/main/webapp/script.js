@@ -140,7 +140,7 @@ function createCommentData(firstRun) {
       }
       const comment = commentData[i];
       console.log(comment);
-      commentElement.appendChild(createCommentNode(comment.name, comment.text, comment.date, comment.id, comment.imageUrl));
+      commentElement.appendChild(createCommentNode(comment.name, comment.text, comment.date, comment.id, comment.imageKey));
 
       var deleteBtn = configureDeleteButton(comment);
       var editBtn = configureEditButton(comment);
@@ -311,6 +311,7 @@ function createCommentNode(name, text, date, id, imageUrl) {
 	commentNode.appendChild(textNode);
   if (imageUrl) {
     const imageBox = document.createElement('img');
+    let imageUrl = '/blobs?id=' + id;
     imageBox.src = imageUrl;
     commentNode.appendChild(imageBox);
   }
