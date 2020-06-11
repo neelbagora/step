@@ -315,20 +315,25 @@ public final class DataServlet extends HttpServlet {
       return null;
     }
 
-    // We could check the validity of the file here, e.g. to make sure it's an image file
-    // https://stackoverflow.com/q/10779564/873165
-
     // Use ImagesService to get a URL that points to the uploaded file.
     ImagesService imagesService = ImagesServiceFactory.getImagesService();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity newEntity = new Entity("ImageURL");
+    newEntity.setProperty("comment-id", request.getParameter("id"));
+    newEntity.setProperty("blob-key", blobKey);
+    datastore.put(newEntity);
+    
     ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
 
     // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
     // path to the image, rather than the path returned by imagesService which contains a host.
     try {
+      System.out.println("Times");
       URL url = new URL(imagesService.getServingUrl(options));
       return url.getPath();
     } catch (MalformedURLException e) {
       return imagesService.getServingUrl(options);
     }
+    
   }
 }
