@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-// Handles comment data on the '/data' page.
+// Handles comment data on the '/login' page.
 @WebServlet("/login")
 public final class LoginStatus extends HttpServlet {
   
@@ -32,7 +32,7 @@ public final class LoginStatus extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     Gson gson = new Gson();
     if (userService.isUserLoggedIn()) {
-      response.setContentType("application/json;");
+      response.setContentType("application/json");
 		  response.getWriter().println(gson.toJson(userService.getCurrentUser().getEmail()));
     }
     else {

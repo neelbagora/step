@@ -13,6 +13,7 @@ public final class UserComment {
 	private String date;
   private long originalTimeStamp;
   private String user_id;
+  private String imageUrl;
 
 	/**
 	 * Constructor for UserComment Class
@@ -23,8 +24,9 @@ public final class UserComment {
 	 * @param timestamp Long value to be converted into readable date format.
    * @param user_id   String id of original poster.
    * @param edited   boolean representing if the comment is edited.
+   * @param imageUrl url pointing to associated comment image.
 	 */
-	public UserComment(long id, String name, String text, long timestamp, String user_id, boolean edited) {
+	public UserComment(long id, String name, String text, long timestamp, String user_id, boolean edited, String imageUrl) {
 		this.id = id;
 		this.name = name;
 		this.text = text; 
@@ -34,6 +36,7 @@ public final class UserComment {
     }
     originalTimeStamp = timestamp;
     this.user_id = user_id;
+    this.imageUrl = imageUrl;
   }
 
 	/**
