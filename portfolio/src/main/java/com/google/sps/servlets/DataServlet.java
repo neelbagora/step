@@ -43,7 +43,6 @@ import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -137,8 +136,6 @@ public final class DataServlet extends HttpServlet {
     String uploadUrl = getUploadedFileUrl(request, "image");
     commentEntity.setProperty("image-url", uploadUrl);
 
-    //String imageUrl = getImageUrl(request, "image");
-
     Entity logEntity = new Entity("Log");
     logEntity.setProperty("name", newComment.getName());
     logEntity.setProperty("text", newComment.getText());
@@ -152,12 +149,7 @@ public final class DataServlet extends HttpServlet {
     // Respond with the result.
     response.sendRedirect("/index.html");
   }
-/*
-  public String getImageUrl(HttpServletRequest request, String parameterName) {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
-  }
-*/
   /**
    * postIpAddress creates a post request to Java Servlet
    * containing string IP address and the String timestamp.
