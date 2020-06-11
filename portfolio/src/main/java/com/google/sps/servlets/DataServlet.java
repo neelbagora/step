@@ -294,8 +294,16 @@ public final class DataServlet extends HttpServlet {
 		return request.getRemoteAddr();
 	}
 
-    /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
-  public String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+
+	/**
+	 * getUploadedFileUrl locates the uploaded image url from Blobstore
+   * and returns it.
+	 *
+	 * @param request              The HttpServletRequest of interest
+   * @param formInputElementName request parameter name where image is located.
+	 * @return                     URL of requested image.
+	 */  
+   public String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");

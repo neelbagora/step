@@ -17,7 +17,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
-// Handles comment data on the '/data' page.
+// Handles edit data on the '/edit' page.
 @WebServlet("/edit")
 public final class EditComment extends HttpServlet {
 

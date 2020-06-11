@@ -24,6 +24,7 @@ public final class UserComment {
 	 * @param timestamp Long value to be converted into readable date format.
    * @param user_id   String id of original poster.
    * @param edited   boolean representing if the comment is edited.
+   * @param imageUrl url pointing to associated comment image.
 	 */
 	public UserComment(long id, String name, String text, long timestamp, String user_id, boolean edited, String imageUrl) {
 		this.id = id;

@@ -227,10 +227,19 @@ function editComment(commentId, commentText, commentName) {
   document.getElementById('cancel-changes').style.display = 'block';
 }
 
+/**
+ * cancelChanges() is responsible for handling the behavior of the site if the user decides to cancel
+ * edit on comment.
+ */
 function cancelChanges() {
-  document.getElementById('message').value = "";
-  document.getElementById('uname').value = "";
-  initializeCommentForm();
+  var decision = window.confirm("Are you sure you want to cancel changes?");
+  if (decision) {
+    document.getElementById('message').value = "";
+    document.getElementById('uname').value = "";
+    initializeCommentForm();
+    document.getElementById('cancel-changes').style.display = "none";
+    document.getElementById('message-label').innerText = 'Message:';
+  }
 }
 
 /**
@@ -340,6 +349,10 @@ function verifyLoginCredentials() {
   createCommentData(true);
 }
 
+/**
+ * initializeCommentForm obtains an upload url from '/images' and initializes the comment
+ * form to include the url.
+ */
 function initializeCommentForm() {
   fetch('/images').then(response => response.json()).then((imageUrl) => {
     document.getElementById('comment-form').action = imageUrl;
@@ -347,6 +360,9 @@ function initializeCommentForm() {
   });
 }
 
+/**
+ * editNickName is responsible for site behavior if user decides to change username.
+ */
 function editNickName() {
   document.getElementById('uname-label').style.display = 'block';
   document.getElementById('uname').style.display = 'block';
