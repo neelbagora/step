@@ -13,6 +13,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
 // Handles comment data on the '/data' page.
 @WebServlet("/delete-data")
@@ -35,6 +38,10 @@ public final class DeleteServlet extends HttpServlet {
     for (Entity entity : results.asIterable()) {
       try {
         if (entity.getKey().getId() == Long.parseLong(id)) {
+          BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+          if (entity.getProperty("image-url") != null) {
+            blobstoreService.delete((BlobKey) entity.getProperty("image-url"));
+          }
           datastore.delete(entity.getKey());
           break;
         }

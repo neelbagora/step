@@ -97,12 +97,12 @@ public final class DataServlet extends HttpServlet {
 			long timestamp = (long) entity.getProperty("timestamp");
       String user_id = (String) entity.getProperty("user");
       boolean edited = (boolean) entity.getProperty("edited");
-      String imageUrl = null;
+      BlobKey blobKey = null;
       if (entity.getProperty("image-url") != null) {
-        imageUrl = (String) entity.getProperty("image-url");
+        blobKey = (BlobKey) entity.getProperty("image-url");
       }
 
-      UserComment userComment = new UserComment(id, name, message, timestamp, user_id, edited, imageUrl);
+      UserComment userComment = new UserComment(id, name, message, timestamp, user_id, edited, blobKey);
 			comments.add(userComment);
 		}
 
@@ -123,6 +123,7 @@ public final class DataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    System.out.println("DATA");
     // Get the input from the form.
     UserComment newComment = parseCommentData(request);
     UserService userService = UserServiceFactory.getUserService();
@@ -133,8 +134,8 @@ public final class DataServlet extends HttpServlet {
     commentEntity.setProperty("timestamp", System.currentTimeMillis());
     commentEntity.setProperty("user", userService.getCurrentUser().getEmail());
     commentEntity.setProperty("edited", false);
-    String uploadUrl = getUploadedFileUrl(request, "image");
-    commentEntity.setProperty("image-url", uploadUrl);
+    BlobKey uploadBlobKey = getFileBlobKey(request, "image");
+    commentEntity.setProperty("image-url", uploadBlobKey);
 
     Entity logEntity = new Entity("Log");
     logEntity.setProperty("name", newComment.getName());
@@ -288,14 +289,14 @@ public final class DataServlet extends HttpServlet {
 
 
 	/**
-	 * getUploadedFileUrl locates the uploaded image url from Blobstore
+	 * getFileBlobKey locates the uploaded image key from Blobstore
    * and returns it.
 	 *
 	 * @param request              The HttpServletRequest of interest
    * @param formInputElementName request parameter name where image is located.
-	 * @return                     URL of requested image.
+	 * @return                     BlobKey of requested image.
 	 */  
-   public String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+   public BlobKey getFileBlobKey(HttpServletRequest request, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");
@@ -315,20 +316,26 @@ public final class DataServlet extends HttpServlet {
       return null;
     }
 
-    // We could check the validity of the file here, e.g. to make sure it's an image file
-    // https://stackoverflow.com/q/10779564/873165
-
     // Use ImagesService to get a URL that points to the uploaded file.
     ImagesService imagesService = ImagesServiceFactory.getImagesService();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity newEntity = new Entity("ImageURL");
+    newEntity.setProperty("comment-id", request.getParameter("id"));
+    newEntity.setProperty("blob-key", blobKey);
+    datastore.put(newEntity);
+    
+    /*
     ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
 
     // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
     // path to the image, rather than the path returned by imagesService which contains a host.
     try {
+      System.out.println("Times");
       URL url = new URL(imagesService.getServingUrl(options));
       return url.getPath();
     } catch (MalformedURLException e) {
       return imagesService.getServingUrl(options);
-    }
+    } */
+    return blobKey;
   }
 }

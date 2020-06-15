@@ -4,6 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Neel's Portfolio</title>
+    <link rel="icon" href="/images/n-favicon.png">
 		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -146,7 +147,7 @@
 				<label id="message-label" for="message">Message:</label>
         <textarea id="message" name="message"></textarea>
         <label for="image">Upload Image:</label>
-        <input id="image-uploader" type="file" id="image" name="image">
+        <input id="image-uploader" type="file" id="image" name="image" accept="image/*">
 				<button class="btn" onclick="createCommentData(true); submitForm();" style="float: right;">Submit</button>
 			</form>
       <button class="btn" onclick="createCommentData(false);" style="float: right;">Refresh</button>

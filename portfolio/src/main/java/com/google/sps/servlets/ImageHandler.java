@@ -20,7 +20,7 @@ public final class ImageHandler extends HttpServlet {
    * to '/images' servlet page. Is compatible with edit requests and generic
    * comment post requests.
    * 
-   * @param request HttpServletRequest used to make POST request.
+   * @param request HttpServletRequest used to make GET request.
    * @param response HttpServletResponse used in GET requests.
    * @throws IOException
    */

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import com.google.appengine.api.blobstore.BlobKey;
 
 // Class to handle comments being pushed to the server.
 public final class UserComment {
@@ -13,7 +14,7 @@ public final class UserComment {
 	private String date;
   private long originalTimeStamp;
   private String user_id;
-  private String imageUrl;
+  private BlobKey imageKey;
 
 	/**
 	 * Constructor for UserComment Class
@@ -24,9 +25,9 @@ public final class UserComment {
 	 * @param timestamp Long value to be converted into readable date format.
    * @param user_id   String id of original poster.
    * @param edited   boolean representing if the comment is edited.
-   * @param imageUrl url pointing to associated comment image.
+   * @param imageKey  url pointing to associated comment image.
 	 */
-	public UserComment(long id, String name, String text, long timestamp, String user_id, boolean edited, String imageUrl) {
+	public UserComment(long id, String name, String text, long timestamp, String user_id, boolean edited, BlobKey imageKey) {
 		this.id = id;
 		this.name = name;
 		this.text = text; 
@@ -36,7 +37,7 @@ public final class UserComment {
     }
     originalTimeStamp = timestamp;
     this.user_id = user_id;
-    this.imageUrl = imageUrl;
+    this.imageKey = imageKey;
   }
 
 	/**
