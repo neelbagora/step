@@ -21,6 +21,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class FindMeetingQuery {
+  
+  /**
+   * query takes in events and a request and determines the best possible TimeRange for the meeting
+   * to take place. If no time is available, returns TimeRange([]). TimeRange is represented in minutes
+   * so the day starts at 0 minutes and ends at 1440 minutes.
+   *
+   * @param  events  The events that are already in the schedule that potentially make a time unavailable.
+   * @param  request The meeting request being made.
+   * @return The Collection of potential TimeRange objects.
+   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     long timeNeeded = request.getDuration();
     if (timeNeeded > TimeRange.WHOLE_DAY.duration()) {
@@ -77,6 +87,16 @@ public final class FindMeetingQuery {
     }
   }
 
+  /**
+   * getOccupiedTimeZones takes in the existing events and a meeting request and returns a list of
+   * optimized TimeRange('s) that are in the timeline. Optimized in this context means that events
+   * that are overlapping are combined to make it easier to create meeting slots without the need
+   * to read every single (sometimes redundant) event blocks.
+   *
+   * @param  events  The events that are already in the schedule that potentially make a time unavailable.
+   * @param  request The meeting request being made.
+   * @return The Collection of optimized TimeRange objects.
+   */
   public Collection<TimeRange> getOccupiedTimeZones(Collection<Event> events, MeetingRequest request) {
     Iterator<Event> iterator = events.iterator();
     ArrayList<TimeRange> occupiedTimes = new ArrayList<>();
