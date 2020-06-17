@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class FindMeetingQuery {
+  ArrayList<Event> optionalEvents = null;
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     long timeNeeded = request.getDuration();
     if (timeNeeded > TimeRange.WHOLE_DAY.duration()) {
@@ -30,12 +31,15 @@ public final class FindMeetingQuery {
       return Arrays.asList(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TimeRange.END_OF_DAY, true));
     }
 
+    // Build collection of occupied zones.
     Collection<TimeRange> occupiedTimes = getOccupiedTimeZones(events, request);
     
     ArrayList<TimeRange> validTimes = new ArrayList<>();
     int freeStart = TimeRange.START_OF_DAY;
     int freeEnd = TimeRange.END_OF_DAY;
-    System.out.println("Start run");
+    ArrayList<TimeRange> overlapRanges = new ArrayList<>();
+  
+    // Form available TimeRanges
     for (TimeRange timeRange : occupiedTimes) {
       freeEnd = timeRange.start();
       if (freeStart == freeEnd) {
@@ -44,6 +48,14 @@ public final class FindMeetingQuery {
       else {
         if (freeEnd - freeStart >= timeNeeded) {
           validTimes.add(TimeRange.fromStartEnd(freeStart, freeEnd - 1, true));
+          boolean overlapped = false;
+          for (Event event : optionalEvents) {
+            // Keeping track of events overlapping optional events
+            if (event.getWhen().overlaps(TimeRange.fromStartEnd(freeStart, freeEnd - 1, true))) {
+              overlapRanges.add(TimeRange.fromStartEnd(freeStart, freeEnd - 1, true));
+              break;
+            }
+          }
         }
         freeStart = timeRange.end();
       }
@@ -51,19 +63,37 @@ public final class FindMeetingQuery {
     if ((freeStart != TimeRange.END_OF_DAY + 1) && ((TimeRange.END_OF_DAY + 1 - freeStart) >= timeNeeded)) {
       validTimes.add(TimeRange.fromStartEnd(freeStart, TimeRange.END_OF_DAY, true));
     }
-    return validTimes;
+
+    // There are no free zones where everyone can attend.
+    if (overlapRanges.size() == validTimes.size()) {
+      return validTimes;
+    }
+    else {
+      // Remove the events in which optional people cannot go to.
+      for (TimeRange range : overlapRanges) {
+        validTimes.remove(range);
+      }
+      return validTimes;
+    }
   }
 
   public Collection<TimeRange> getOccupiedTimeZones(Collection<Event> events, MeetingRequest request) {
     Iterator<Event> iterator = events.iterator();
     ArrayList<TimeRange> occupiedTimes = new ArrayList<>();
-    System.out.println("ADd Times");
+    ArrayList<Event> optionalEventsTemp = new ArrayList<>();
+
+    if (request.getAttendees().isEmpty()) {
+      request = new MeetingRequest(request.getOptionalAttendees(), request.getDuration());
+    }
     while (iterator.hasNext()) {
       Event currentEvent = iterator.next();
       System.out.println(currentEvent.getTitle());
       System.out.println(currentEvent.getWhen().toString());
       boolean conflict = false;
       ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
+      ArrayList<String> optionalAttendees = new ArrayList<>(request.getOptionalAttendees());
+
+      //locate potential conflicts with required attendees.
       for (int i = 0; i < attendees.size(); i++) {
         if (currentEvent.getAttendees().contains(attendees.get(i))) {
           System.out.println("Conflict");
@@ -71,14 +101,31 @@ public final class FindMeetingQuery {
           break;
         }
       }
+
       if (conflict) {
         occupiedTimes.add(currentEvent.getWhen());
       }
+      else {
+        //No conflict -> locate potential optional conflicts.
+        for (int i = 0; i < optionalAttendees.size(); i++) {
+          if (currentEvent.getAttendees().contains(optionalAttendees.get(i))) {
+            optionalEventsTemp.add(currentEvent);
+          }
+        }
+      }
     }
     Collections.sort(occupiedTimes, TimeRange.ORDER_BY_START);
+    Collections.sort(optionalEventsTemp, Event.ORDER_BY_START);
+    optionalEvents = optionalEventsTemp;
 
     TimeRange previousTimeRange = null;
     ArrayList<TimeRange> newTimes = new ArrayList<>();
+    
+    //merge overlapping TimeRange('s)
+    // Ex:          |----A----|
+    //                     |--A--|
+    //-------------------------------
+    // Result:      |-----A------|
     for (TimeRange time : occupiedTimes) {
       if (previousTimeRange == null) {
         previousTimeRange = time;
@@ -96,7 +143,6 @@ public final class FindMeetingQuery {
     if (previousTimeRange != null) {
       newTimes.add(previousTimeRange);
     }
-
     return newTimes;
   }
 }
