@@ -142,7 +142,7 @@
 			<form id="comment-form" name="comment-form" style="display: none;" action="/data" method="POST" onsubmit="return validateForm()" required>
 				<input style="display: none;" name="email" id="email" value = ""/>
         
-        <label id="uname-label" style="display: none;" for="uname">New Username (Only applies if you submit or edit a comment - Default username is the email username before @): </label>
+        <label id="uname-label" style="display: none;" for="uname">New Username (Only applies if you submit or edit a comment - Default username is the email username before @):</label>
 				<input type="text" style="display: none;" id="uname" name="uname" value=""><br>
 				<label id="message-label" for="message">Message:</label>
         <textarea id="message" name="message"></textarea>
@@ -151,7 +151,8 @@
 				<button class="btn" onclick="createCommentData(true); submitForm();" style="float: right;">Submit</button>
 			</form>
       <button class="btn" onclick="createCommentData(false);" style="float: right;">Refresh</button>
-			<button class="btn"  id="change-user" style="display: none; float: right;" onclick="editNickName();">Change Username</button>
+			<button class="btn"  id="send-email" style="display: block; float: right;" onclick="sendEmail();">Send as Email</button>
+      <button class="btn"  id="change-user" style="display: none; float: right;" onclick="editNickName();">Change Username</button>
       <button class="btn"  id="cancel-changes" style="display: none; float: right;" onclick="cancelChanges();">Cancel Changes</button>
       <br>
 			<br>

@@ -35,7 +35,6 @@ public final class EditComment extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    System.out.println("Request Received");
 		String id = request.getParameter("id") != null ? request.getParameter("id") : "";
     System.out.println(id);
     Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);

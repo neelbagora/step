@@ -104,17 +104,15 @@ public final class FindMeetingQuery {
     if (request.getAttendees().isEmpty()) {
       request = new MeetingRequest(request.getOptionalAttendees(), request.getDuration());
     }
+    // This while loop iterates over all the events that are passed in and determines
+    // if there are any conflicts with mandatory attendees.
+    ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
     while (iterator.hasNext()) {
       Event currentEvent = iterator.next();
       boolean conflict = false;
-      ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
       
       //locate potential conflicts with required attendees.
-      if (attendees.stream().anyMatch(attendee -> currentEvent.getAttendees().contains(attendee))) {
-        conflict = true;
-      }
-
-      if (conflict) {
+      if (currentEvent.getAttendees().stream().anyMatch(attendee -> attendees.contains(attendee))) {
         occupiedTimes.add(currentEvent.getWhen());
       }
     }

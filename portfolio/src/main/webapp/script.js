@@ -319,6 +319,11 @@ function createCommentNode(name, text, date, id, imageUrl) {
 	return commentNode;
 }
 
+function sendEmail() {
+  document.getElementById('comment-form').action = '/email';
+  document.getElementById('comment-form').submit();
+}
+
 // Adds click listener and listener actions to each button.
 var btnContainer = document.getElementById("myBtnContainer");
 var btns = document.getElementsByClassName("btn");
