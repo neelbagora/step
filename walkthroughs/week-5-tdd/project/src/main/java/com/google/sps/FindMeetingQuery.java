@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class FindMeetingQuery {
+<<<<<<< HEAD
   
   /**
    * query takes in events and a request and determines the best possible TimeRange for the meeting
@@ -31,6 +32,9 @@ public final class FindMeetingQuery {
    * @param  request The meeting request being made.
    * @return The Collection of potential TimeRange objects.
    */
+=======
+  ArrayList<Event> optionalEvents = null;
+>>>>>>> parent of 54bae8b... Clean code up.
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     long timeNeeded = request.getDuration();
     if (timeNeeded > TimeRange.WHOLE_DAY.duration()) {
@@ -42,8 +46,7 @@ public final class FindMeetingQuery {
 
     // Build collection of occupied zones.
     Collection<TimeRange> occupiedTimes = getOccupiedTimeZones(events, request);
-    Collection<Event> optionalEvents = getOptionalEvents(events, request);
-
+    
     ArrayList<TimeRange> validTimes = new ArrayList<>();
     int freeStart = TimeRange.START_OF_DAY;
     int freeEnd = TimeRange.END_OF_DAY;
@@ -70,8 +73,6 @@ public final class FindMeetingQuery {
         freeStart = timeRange.end();
       }
     }
-
-    // Add TimeRange representing freeStart to the end of the day if applicable
     if ((freeStart != TimeRange.END_OF_DAY + 1) && ((TimeRange.END_OF_DAY + 1 - freeStart) >= timeNeeded)) {
       validTimes.add(TimeRange.fromStartEnd(freeStart, TimeRange.END_OF_DAY, true));
     }
@@ -82,7 +83,9 @@ public final class FindMeetingQuery {
     }
     else {
       // Remove the events in which optional people cannot go to.
-      validTimes.removeAll(overlapRanges);
+      for (TimeRange range : overlapRanges) {
+        validTimes.remove(range);
+      }
       return validTimes;
     }
   }
@@ -100,6 +103,7 @@ public final class FindMeetingQuery {
   public Collection<TimeRange> getOccupiedTimeZones(Collection<Event> events, MeetingRequest request) {
     Iterator<Event> iterator = events.iterator();
     ArrayList<TimeRange> occupiedTimes = new ArrayList<>();
+    ArrayList<Event> optionalEventsTemp = new ArrayList<>();
 
     if (request.getAttendees().isEmpty()) {
       request = new MeetingRequest(request.getOptionalAttendees(), request.getDuration());
@@ -109,14 +113,42 @@ public final class FindMeetingQuery {
     ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
     while (iterator.hasNext()) {
       Event currentEvent = iterator.next();
+      System.out.println(currentEvent.getTitle());
+      System.out.println(currentEvent.getWhen().toString());
       boolean conflict = false;
+<<<<<<< HEAD
       
       //locate potential conflicts with required attendees.
       if (currentEvent.getAttendees().stream().anyMatch(attendee -> attendees.contains(attendee))) {
+=======
+      ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
+      ArrayList<String> optionalAttendees = new ArrayList<>(request.getOptionalAttendees());
+
+      //locate potential conflicts with required attendees.
+      for (int i = 0; i < attendees.size(); i++) {
+        if (currentEvent.getAttendees().contains(attendees.get(i))) {
+          System.out.println("Conflict");
+          conflict = true;
+          break;
+        }
+      }
+
+      if (conflict) {
+>>>>>>> parent of 54bae8b... Clean code up.
         occupiedTimes.add(currentEvent.getWhen());
+      }
+      else {
+        //No conflict -> locate potential optional conflicts.
+        for (int i = 0; i < optionalAttendees.size(); i++) {
+          if (currentEvent.getAttendees().contains(optionalAttendees.get(i))) {
+            optionalEventsTemp.add(currentEvent);
+          }
+        }
       }
     }
     Collections.sort(occupiedTimes, TimeRange.ORDER_BY_START);
+    Collections.sort(optionalEventsTemp, Event.ORDER_BY_START);
+    optionalEvents = optionalEventsTemp;
 
     TimeRange previousTimeRange = null;
     ArrayList<TimeRange> newTimes = new ArrayList<>();
@@ -144,21 +176,5 @@ public final class FindMeetingQuery {
       newTimes.add(previousTimeRange);
     }
     return newTimes;
-  }
-
-  // Locate events that are considered optional, was merged with the other function but required global variable.
-  public Collection<Event> getOptionalEvents(Collection<Event> events, MeetingRequest request) {
-    ArrayList<Event> optionalEventsTemp = new ArrayList<>();
-    ArrayList<String> optionalAttendees = new ArrayList<>(request.getOptionalAttendees());
-
-    for (Event currentEvent : events) {
-      // if the current event contains any optional attendees, then it is added as optional event
-      if (optionalAttendees.stream().anyMatch(attendee -> currentEvent.getAttendees().contains(attendee))) {
-        optionalEventsTemp.add(currentEvent);
-      }
-    }
-
-    Collections.sort(optionalEventsTemp, Event.ORDER_BY_START);
-    return optionalEventsTemp;
   }
 }
