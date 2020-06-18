@@ -14,11 +14,7 @@
 
 package com.google.sps;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public final class FindMeetingQuery {
   
@@ -47,7 +43,7 @@ public final class FindMeetingQuery {
     ArrayList<TimeRange> validTimes = new ArrayList<>();
     int freeStart = TimeRange.START_OF_DAY;
     int freeEnd = TimeRange.END_OF_DAY;
-    ArrayList<TimeRange> overlapRanges = new ArrayList<>();
+    Set<TimeRange> overlapRanges = new HashSet<>();
   
     // Form available TimeRanges
     for (TimeRange timeRange : occupiedTimes) {
@@ -104,17 +100,13 @@ public final class FindMeetingQuery {
     if (request.getAttendees().isEmpty()) {
       request = new MeetingRequest(request.getOptionalAttendees(), request.getDuration());
     }
+    
+    Set<String> attendees = new HashSet<>(request.getAttendees());
+  
     while (iterator.hasNext()) {
       Event currentEvent = iterator.next();
-      boolean conflict = false;
-      ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
-      
       //locate potential conflicts with required attendees.
-      if (attendees.stream().anyMatch(attendee -> currentEvent.getAttendees().contains(attendee))) {
-        conflict = true;
-      }
-
-      if (conflict) {
+      if (!Collections.disjoint(attendees, currentEvent.getAttendees())) {
         occupiedTimes.add(currentEvent.getWhen());
       }
     }
@@ -151,11 +143,11 @@ public final class FindMeetingQuery {
   // Locate events that are considered optional, was merged with the other function but required global variable.
   public Collection<Event> getOptionalEvents(Collection<Event> events, MeetingRequest request) {
     ArrayList<Event> optionalEventsTemp = new ArrayList<>();
-    ArrayList<String> optionalAttendees = new ArrayList<>(request.getOptionalAttendees());
+    Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
 
     for (Event currentEvent : events) {
       // if the current event contains any optional attendees, then it is added as optional event
-      if (optionalAttendees.stream().anyMatch(attendee -> currentEvent.getAttendees().contains(attendee))) {
+      if (!Collections.disjoint(optionalAttendees, currentEvent.getAttendees())) {
         optionalEventsTemp.add(currentEvent);
       }
     }
