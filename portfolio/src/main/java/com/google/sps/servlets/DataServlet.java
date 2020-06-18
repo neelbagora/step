@@ -123,7 +123,6 @@ public final class DataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    System.out.println("DATA");
     // Get the input from the form.
     UserComment newComment = parseCommentData(request);
     UserService userService = UserServiceFactory.getUserService();
@@ -142,6 +141,7 @@ public final class DataServlet extends HttpServlet {
     logEntity.setProperty("text", newComment.getText());
     logEntity.setProperty("timestamp", convertTime(System.currentTimeMillis()));
     logEntity.setProperty("user", userService.getCurrentUser().getEmail());
+    logEntity.setProperty("image-url", "/blobs?id=" + commentEntity.getKey().getId());
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
@@ -316,26 +316,6 @@ public final class DataServlet extends HttpServlet {
       return null;
     }
 
-    // Use ImagesService to get a URL that points to the uploaded file.
-    ImagesService imagesService = ImagesServiceFactory.getImagesService();
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity newEntity = new Entity("ImageURL");
-    newEntity.setProperty("comment-id", request.getParameter("id"));
-    newEntity.setProperty("blob-key", blobKey);
-    datastore.put(newEntity);
-    
-    /*
-    ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-
-    // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
-    // path to the image, rather than the path returned by imagesService which contains a host.
-    try {
-      System.out.println("Times");
-      URL url = new URL(imagesService.getServingUrl(options));
-      return url.getPath();
-    } catch (MalformedURLException e) {
-      return imagesService.getServingUrl(options);
-    } */
     return blobKey;
   }
 }
